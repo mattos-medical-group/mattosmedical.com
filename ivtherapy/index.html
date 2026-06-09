@@ -648,5 +648,20 @@ document.querySelectorAll('.lang-btn').forEach((btn) => {
   else buildEmails();
 })();
 </script>
+<script>
+/* Persist ES/EN choice across pages (home defaults to ES on first visit) */
+(function(){
+  var KEY='mmgLang';
+  function apply(l){
+    document.body.classList.toggle('en', l==='en');
+    document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.set===l); });
+    document.documentElement.lang=l;
+  }
+  document.querySelectorAll('.lang-btn').forEach(function(b){
+    b.addEventListener('click', function(){ try{ localStorage.setItem(KEY, b.dataset.set); }catch(e){} });
+  });
+  try{ var s=localStorage.getItem(KEY); if(s) apply(s); }catch(e){}
+})();
+</script>
 </body>
 </html>
