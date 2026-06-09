@@ -466,34 +466,315 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
     <div class="eyebrow"><span data-lang="es">Elige tu Gotero</span><span data-lang="en">Choose Your Drip</span></div>
     <h2><span data-lang="es">Un Menú IV para <em>Cada Necesidad.</em></span><span data-lang="en">An IV Menu for <em>Every Need.</em></span></h2>
     <p class="lead"><span data-lang="es">Cada gotero lo administra nuestro equipo médico bilingüe. ¿No sabes cuál elegir? Te ayudamos a personalizarlo en tu consulta gratuita.</span><span data-lang="en">Every drip is administered by our bilingual medical team. Not sure which to pick? We'll help you customize it in your free consult.</span></p>
-    <div class="iv-menu">
-      <div class="iv-item feat"><span class="iv-tag">Signature</span><h3>Fuente de la Juventud</h3><p><span data-lang="es">25 nutrientes para energía, piel radiante y claridad mental.</span><span data-lang="en">25 nutrients for energy, radiant skin, and mental clarity.</span></p></div>
-      <div class="iv-item"><h3><span data-lang="es">Inmunidad</span><span data-lang="en">Immunity</span></h3><p><span data-lang="es">Vitamina C en alta dosis, zinc y antioxidantes para reforzar defensas.</span><span data-lang="en">High-dose vitamin C, zinc, and antioxidants to strengthen defenses.</span></p></div>
-      <div class="iv-item"><h3><span data-lang="es">Energía</span><span data-lang="en">Energy</span></h3><p><span data-lang="es">Complejo B y B12 para combatir el cansancio sin cafeína.</span><span data-lang="en">B-complex and B12 to fight fatigue without caffeine.</span></p></div>
-      <div class="iv-item"><h3><span data-lang="es">Hidratación</span><span data-lang="en">Hydration</span></h3><p><span data-lang="es">Fluidos y electrolitos para recuperarte rápido.</span><span data-lang="en">Fluids and electrolytes to rehydrate fast.</span></p></div>
-      <div class="iv-item"><h3><span data-lang="es">Belleza</span><span data-lang="en">Glow</span></h3><p><span data-lang="es">Biotina y glutatión para piel, cabello y uñas.</span><span data-lang="en">Biotin and glutathione for skin, hair, and nails.</span></p></div>
-      <div class="iv-item"><h3><span data-lang="es">Recuperación</span><span data-lang="en">Recovery</span></h3><p><span data-lang="es">Para después del ejercicio, viajes o una noche larga.</span><span data-lang="en">For post-workout, travel, or a long night.</span></p></div>
+    <style>
+/* IV flip cards */
+.iv-flip-hint{font-size:13px;color:var(--mmg-text-muted);margin-top:14px;display:flex;align-items:center;gap:7px;}
+.iv-flip-hint svg{width:15px;height:15px;color:var(--mmg-blue);flex-shrink:0;}
+.iv-flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:16px;margin-top:22px;}
+.iv-flip{perspective:1500px;height:410px;cursor:pointer;outline:none;border-radius:16px;}
+.iv-flip:focus-visible{box-shadow:0 0 0 3px rgba(38,120,192,0.45);}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s var(--mmg-ease-out);transform-style:preserve-3d;}
+.iv-flip.flipped .flip-inner{transform:rotateY(180deg);}
+@media (hover:hover){.iv-flip:hover .flip-inner{transform:rotateY(180deg);}}
+.flip-face{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--mmg-shadow-sm);}
+.flip-front{background:#fff;border:1px solid var(--mmg-border);border-top:3px solid var(--mmg-blue);padding:22px 20px;justify-content:space-between;}
+.iv-flip.feat .flip-front{border-top-color:var(--mmg-gold);background:linear-gradient(150deg,rgba(197,164,100,0.13),#fff 62%);}
+.ff-top{display:flex;flex-direction:column;gap:11px;align-items:flex-start;}
+.ff-icon{width:40px;height:40px;border-radius:11px;background:rgba(38,120,192,0.10);color:var(--mmg-blue);display:flex;align-items:center;justify-content:center;}
+.iv-flip.feat .ff-icon{background:rgba(197,164,100,0.18);color:#9a7b32;}
+.ff-icon svg{width:22px;height:22px;}
+.ff-tag{display:inline-block;background:var(--mmg-gold);color:#3a2810;font-size:9px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;padding:3px 9px;border-radius:20px;}
+.flip-front h3{font-family:var(--mmg-font-display);font-size:22px;font-weight:700;color:var(--mmg-navy);line-height:1.12;}
+.ff-tagline{font-size:13.5px;color:var(--mmg-text-muted);line-height:1.5;}
+.ff-hint{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:var(--mmg-blue);}
+.ff-hint svg{width:13px;height:13px;transition:transform .25s var(--mmg-ease-out);}
+.iv-flip:hover .ff-hint svg{transform:translateX(3px);}
+.flip-back{transform:rotateY(180deg);background:linear-gradient(150deg,var(--mmg-navy),var(--mmg-navy-light));color:#fff;border:1px solid var(--mmg-navy);padding:20px 18px;}
+.fb-name{font-family:var(--mmg-font-display);font-size:17px;font-weight:700;color:#fff;line-height:1.12;margin-bottom:8px;}
+.fb-desc{font-size:12px;line-height:1.55;color:rgba(255,255,255,0.82);margin-bottom:11px;}
+.fb-label{font-size:9.5px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--mmg-blue-light);margin-bottom:9px;}
+.fb-chips{display:flex;flex-wrap:wrap;gap:5px;overflow-y:auto;flex:1;align-content:flex-start;-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 14px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 14px),transparent);}
+.fb-chips::-webkit-scrollbar{width:5px;}
+.fb-chips::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.22);border-radius:3px;}
+.fb-chip{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.16);color:rgba(255,255,255,0.92);font-size:10.5px;font-weight:600;padding:4px 8px;border-radius:20px;}
+</style>
+    <p class="iv-flip-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span data-lang="es">Pasa el cursor o toca cualquier gotero para ver qué lleva dentro.</span><span data-lang="en">Hover or tap any drip to see what’s inside.</span></p>
+    <div class="iv-flip-grid">
+      <div class="iv-flip feat" tabindex="0" role="button" aria-label="Fountain of Youth — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top"><span class="ff-tag">Signature</span>
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Fuente de la Juventud</span><span data-lang="en">Fountain of Youth</span></h3>
+              <div class="ff-tagline"><span data-lang="es">25 nutrientes. Energía, piel y enfoque.</span><span data-lang="en">25 nutrients. Energy, skin, and focus.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Fuente de la Juventud</span><span data-lang="en">Fountain of Youth</span></div>
+            <p class="fb-desc"><span data-lang="es">Nuestra fórmula insignia: 25 nutrientes para energía sostenida, piel radiante y claridad mental. 100% de absorción, directo al torrente sanguíneo.</span><span data-lang="en">Our signature formula: 25 nutrients for lasting energy, radiant skin, and mental clarity. 100% absorption, straight to your bloodstream.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">Vitamin C (ascorbate)</span><span class="fb-chip">B-Complex</span><span class="fb-chip">B12 (cobalamin)</span><span class="fb-chip">Glutathione (GSH)</span><span class="fb-chip">Biotin</span><span class="fb-chip">Magnesium (Mg)</span><span class="fb-chip">Zinc (Zn)</span><span class="fb-chip">Selenium (Se)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Athletic Performance & Recovery — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Rendimiento Atlético y Recuperación</span><span data-lang="en">Athletic Performance & Recovery</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Antes o después de entrenar.</span><span data-lang="en">Before or after training.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Rendimiento Atlético y Recuperación</span><span data-lang="en">Athletic Performance & Recovery</span></div>
+            <p class="fb-desc"><span data-lang="es">Diseñada para atletas y para cualquiera que entrene en serio. Apoya el rendimiento, acelera la recuperación y ayuda a construir un físico magro — antes o después de tu evento.</span><span data-lang="en">Built for athletes and anyone training hard. Supports performance, speeds recovery, and helps build a lean physique — before or after your event.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">B-Complex</span><span class="fb-chip">B5 (pantothenic acid)</span><span class="fb-chip">B6 (pyridoxine)</span><span class="fb-chip">B12 (cobalamin)</span><span class="fb-chip">Glycerophosphocholine (GPC)</span><span class="fb-chip">L-carnitine</span><span class="fb-chip">L-glutamine</span><span class="fb-chip">L-arginine</span><span class="fb-chip">Magnesium (Mg)</span><span class="fb-chip">Zinc (Zn)</span><span class="fb-chip">Vitamin C (ascorbate)</span><span class="fb-chip">Glutathione (GSH)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Brain Boost — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Brain Boost</span><span data-lang="en">Brain Boost</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Enfoque, memoria y claridad.</span><span data-lang="en">Focus, memory, and clarity.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Brain Boost</span><span data-lang="en">Brain Boost</span></div>
+            <p class="fb-desc"><span data-lang="es">GPC y taurina cruzan la barrera cerebral para apoyar la acetilcolina, mientras el complejo B, minerales y vitamina C potencian neurotransmisores como serotonina y dopamina. Para enfoque, memoria y energía mental.</span><span data-lang="en">GPC and taurine cross the blood-brain barrier to support acetylcholine, while B-complex, minerals, and vitamin C power neurotransmitters like serotonin and dopamine. For focus, memory, and mental energy.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">B-Complex</span><span class="fb-chip">B2 (riboflavin)</span><span class="fb-chip">B3 (niacin)</span><span class="fb-chip">Niacinamide</span><span class="fb-chip">B5 (pantothenic acid)</span><span class="fb-chip">B6 (pyridoxine)</span><span class="fb-chip">B12 (cobalamin)</span><span class="fb-chip">Glycerophosphocholine (GPC)</span><span class="fb-chip">L-Glycine</span><span class="fb-chip">Taurine</span><span class="fb-chip">Magnesium (Mg)</span><span class="fb-chip">Selenium (Se)</span><span class="fb-chip">Zinc (Zn)</span><span class="fb-chip">Glutathione (GSH)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Chemo & Radiation Recovery — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Recuperación de Quimio y Radiación</span><span data-lang="en">Chemo & Radiation Recovery</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Reponer. Reparar. Recuperar.</span><span data-lang="en">Replenish. Repair. Recover.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Recuperación de Quimio y Radiación</span><span data-lang="en">Chemo & Radiation Recovery</span></div>
+            <p class="fb-desc"><span data-lang="es">La quimio y la radiación aumentan enormemente la demanda de nutrientes esenciales. Reponemos vitaminas clave y agregamos antioxidantes potentes para ayudar a "limpiar" el estrés oxidativo. Coméntalo con tu oncólogo.</span><span data-lang="en">Chemo and radiation create a huge demand for essential nutrients. We replenish key vitamins and add powerful antioxidants to help "mop up" oxidative stress. Discuss with your oncologist.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">B-Complex</span><span class="fb-chip">B1 (thiamine)</span><span class="fb-chip">B2 (riboflavin)</span><span class="fb-chip">Alpha Lipoic Acid (ALA)</span><span class="fb-chip">B5 (pantothenic acid)</span><span class="fb-chip">B6 (pyridoxine)</span><span class="fb-chip">B9 (folate)</span><span class="fb-chip">B12 (cobalamin)</span><span class="fb-chip">Vitamin C (ascorbate)</span><span class="fb-chip">Glutathione (GSH)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Cold & Flu — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Resfriado y Gripe</span><span data-lang="en">Cold & Flu</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Combate el resfriado y la gripe.</span><span data-lang="en">Knock out cold & flu.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Resfriado y Gripe</span><span data-lang="en">Cold & Flu</span></div>
+            <p class="fb-desc"><span data-lang="es">No dejes que un resfriado o la gripe te frenen. Vitamina C antiviral en alta dosis, minerales inmunes y Toradol para el malestar — para que te sientas mejor, rápido.</span><span data-lang="en">Don’t let a cold or the flu slow you down. High-dose antiviral vitamin C, immune minerals, and Toradol for the aches — so you feel better, fast.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">0.9% NaCl</span><span class="fb-chip">Toradol (ketorolac)</span><span class="fb-chip">Vitamin C (ascorbate)</span><span class="fb-chip">B2 (riboflavin)</span><span class="fb-chip">B5 (pantothenic acid)</span><span class="fb-chip">B6 (pyridoxine)</span><span class="fb-chip">B12 (cobalamin)</span><span class="fb-chip">Zinc (Zn)</span><span class="fb-chip">Selenium (Se)</span><span class="fb-chip">Magnesium (Mg)</span><span class="fb-chip">L-glutamine</span><span class="fb-chip">Vitamin D</span><span class="fb-chip">Glutathione (GSH)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Glutathione — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Glutatión</span><span data-lang="en">Glutathione</span></h3>
+              <div class="ff-tagline"><span data-lang="es">El antioxidante maestro.</span><span data-lang="en">The master antioxidant.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Glutatión</span><span data-lang="en">Glutathione</span></div>
+            <p class="fb-desc"><span data-lang="es">El antioxidante maestro del cuerpo, con fuerte acción neuroprotectora. Detox celular, piel más clara y defensa antioxidante — solo o como complemento de cualquier gotero.</span><span data-lang="en">The body’s master antioxidant, with strong neuro-protective action. Cellular detox, clearer skin, and antioxidant defense — on its own or as an add-on to any drip.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">Glutathione (GSH)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Good Mood — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Buen Ánimo</span><span data-lang="en">Good Mood</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Calma, equilibrio y bienestar.</span><span data-lang="en">Calm, balanced, content.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Buen Ánimo</span><span data-lang="en">Good Mood</span></div>
+            <p class="fb-desc"><span data-lang="es">Diseñada para una función óptima de neurotransmisores. Las vitaminas B y el triptófano apoyan la serotonina y la dopamina, el GPC mantiene la calma y el enfoque, y el magnesio con taurina te mantienen relajado.</span><span data-lang="en">Designed for optimal neurotransmitter function. B vitamins and tryptophan support serotonin and dopamine, GPC keeps you calm and focused, and magnesium with taurine keep you mellow and relaxed.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">B2 (riboflavin)</span><span class="fb-chip">B5 (pantothenic acid)</span><span class="fb-chip">B6 (pyridoxine)</span><span class="fb-chip">B12 (cobalamin)</span><span class="fb-chip">Niacinamide</span><span class="fb-chip">Inositol</span><span class="fb-chip">Glycerophosphocholine (GPC)</span><span class="fb-chip">Glycine</span><span class="fb-chip">Taurine</span><span class="fb-chip">Magnesium (Mg)</span><span class="fb-chip">Vitamin C (ascorbate)</span><span class="fb-chip">L-glutamine</span><span class="fb-chip">L-tryptophan</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Healthy Gut — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Intestino Sano</span><span data-lang="en">Healthy Gut</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Sana y protege tu intestino.</span><span data-lang="en">Heal & protect your gut.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Intestino Sano</span><span data-lang="en">Healthy Gut</span></div>
+            <p class="fb-desc"><span data-lang="es">La L-glutamina nutre las células intestinales y, junto al zinc, cierra las uniones del "intestino permeable". La vitamina C y el glutatión protegen la mucosa para iniciar la sanación de tu intestino.</span><span data-lang="en">L-glutamine fuels intestinal cells and, with zinc, closes the tight junctions of "leaky gut." Vitamin C and glutathione protect the mucosa to kick-start gut healing.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">Zinc (Zn)</span><span class="fb-chip">L-glutamine</span><span class="fb-chip">Glutathione (GSH)</span><span class="fb-chip">Glycyrrhizin</span><span class="fb-chip">Vitamin C (ascorbate)</span><span class="fb-chip">L-arginine</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="High-Dose Vitamin C — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Vitamina C en Alta Dosis</span><span data-lang="en">High-Dose Vitamin C</span></h3>
+              <div class="ff-tagline"><span data-lang="es">100% biodisponible.</span><span data-lang="en">100% bioavailable.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Vitamina C en Alta Dosis</span><span data-lang="en">High-Dose Vitamin C</span></div>
+            <p class="fb-desc"><span data-lang="es">Por vía oral solo absorbes ~18% de la vitamina C; por IV es 100% biodisponible. Apoya las glándulas suprarrenales, la energía, la piel y la inmunidad, y reduce los efectos de la quimio y la radiación.</span><span data-lang="en">Orally you absorb only ~18% of vitamin C; by IV it’s 100% bioavailable. Supports adrenal glands, energy, skin, and immunity, and eases chemo and radiation side effects.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">Vitamin C (ascorbate)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Immunity Wellness — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Bienestar Inmune</span><span data-lang="en">Immunity Wellness</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Defensa en 20 minutos.</span><span data-lang="en">Immune support in 20 minutes.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Bienestar Inmune</span><span data-lang="en">Immunity Wellness</span></div>
+            <p class="fb-desc"><span data-lang="es">El "Immune Mini": casi los mismos nutrientes que nuestro gotero inmune, en menor volumen (250 cc) y solo 20 minutos. Perfecto para quienes tienen prisa pero quieren soporte de amplio espectro.</span><span data-lang="en">The "Immune Mini": nearly the same nutrients as our full immune drip, in a smaller volume (250 cc) and just 20 minutes. Perfect for those in a hurry who still want broad-spectrum support.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">B-Complex</span><span class="fb-chip">B2 (riboflavin)</span><span class="fb-chip">B5 (pantothenic acid)</span><span class="fb-chip">B6 (pyridoxine)</span><span class="fb-chip">B12 (cobalamin)</span><span class="fb-chip">Selenium (Se)</span><span class="fb-chip">Zinc (Zn)</span><span class="fb-chip">Magnesium (Mg)</span><span class="fb-chip">Calcium Chloride</span><span class="fb-chip">Vitamin C (ascorbate)</span><span class="fb-chip">Glutathione (GSH)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Migraine — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Migraña</span><span data-lang="en">Migraine</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Alivio de migraña.</span><span data-lang="en">Migraine relief.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Migraña</span><span data-lang="en">Migraine</span></div>
+            <p class="fb-desc"><span data-lang="es">Hidratación con magnesio y B2 (riboflavina) — ambos estudiados para la migraña — más Toradol para el dolor y Zofran para la náusea. Fórmula representativa; confírmala con nuestro equipo.</span><span data-lang="en">Hydration with magnesium and B2 (riboflavin) — both studied for migraine — plus Toradol for pain and Zofran for nausea. Representative formula; confirm with our team.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">0.9% NaCl</span><span class="fb-chip">Magnesium (Mg)</span><span class="fb-chip">B2 (riboflavin)</span><span class="fb-chip">Toradol (ketorolac)</span><span class="fb-chip">Zofran (ondansetron)</span><span class="fb-chip">B-Complex</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="NAD+ — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">NAD+</span><span data-lang="en">NAD+</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Energía celular y antiedad.</span><span data-lang="en">Cellular energy & anti-aging.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">NAD+</span><span data-lang="en">NAD+</span></div>
+            <p class="fb-desc"><span data-lang="es">El NAD+ restaura la energía celular, apoya la reparación del ADN y la claridad mental, y se usa en protocolos integrativos de fatiga y neuropatía. Dosis personalizada — pregúntanos.</span><span data-lang="en">NAD+ restores cellular energy, supports DNA repair and mental clarity, and is used in integrative fatigue and neuropathy protocols. Personalized dosing — ask us.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">NAD+</span><span class="fb-chip">B-Complex</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Natural Cancer Therapy — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Terapia Natural Oncológica</span><span data-lang="en">Natural Cancer Therapy</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Soporte integrativo.</span><span data-lang="en">Integrative support.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Terapia Natural Oncológica</span><span data-lang="en">Natural Cancer Therapy</span></div>
+            <p class="fb-desc"><span data-lang="es">Soporte nutricional integrativo de alta dosis para acompañar — no reemplazar — la atención oncológica convencional. Coméntalo siempre con tu oncólogo. Fórmula personalizada.</span><span data-lang="en">High-dose integrative nutritional support to accompany — not replace — conventional oncology care. Always discuss with your oncologist. Personalized formula.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">High-Dose Vitamin C (ascorbate)</span><span class="fb-chip">Alpha Lipoic Acid (ALA)</span><span class="fb-chip">Glutathione (GSH)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Party Recovery — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Recuperación de Fiesta</span><span data-lang="en">Party Recovery</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Recupérate después de la fiesta.</span><span data-lang="en">Bounce back after the party.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Recuperación de Fiesta</span><span data-lang="en">Party Recovery</span></div>
+            <p class="fb-desc"><span data-lang="es">Rehidratación rápida con 1 litro de salino, Toradol para ese dolor de cabeza y Zofran para la náusea. Devolvemos vitaminas B y minerales y rematamos con antioxidantes para sentirte como nuevo.</span><span data-lang="en">Fast rehydration with 1 liter of saline, Toradol for that splitting headache, and Zofran for nausea. We give back B vitamins and minerals and top it off with antioxidants to feel like new.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">0.9% NaCl (Saline)</span><span class="fb-chip">Toradol (ketorolac)</span><span class="fb-chip">Zofran (ondansetron)</span><span class="fb-chip">B-Complex</span><span class="fb-chip">B1 (thiamine)</span><span class="fb-chip">B2 (riboflavin)</span><span class="fb-chip">5-MTHF (Active Folate)</span><span class="fb-chip">B12 (cobalamin)</span><span class="fb-chip">Zinc (Zn)</span><span class="fb-chip">Magnesium (Mg)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="iv-flip" tabindex="0" role="button" aria-label="Travel & Jetlag — see ingredients">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="ff-top">
+              <div class="ff-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-.3 0-.6.13-.8.4C9.4 4.9 5 11 5 14.8a7 7 0 0 0 14 0C19 11 14.6 4.9 12.8 2.6a1 1 0 0 0-.8-.4z"/></svg></div>
+              <h3><span data-lang="es">Viaje y Jetlag</span><span data-lang="en">Travel & Jetlag</span></h3>
+              <div class="ff-tagline"><span data-lang="es">Antes y después de viajar.</span><span data-lang="en">Before & after travel.</span></div>
+            </div>
+            <div class="ff-hint"><span data-lang="es">Ver ingredientes</span><span data-lang="en">See ingredients</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="fb-name"><span data-lang="es">Viaje y Jetlag</span><span data-lang="en">Travel & Jetlag</span></div>
+            <p class="fb-desc"><span data-lang="es">1 litro de salino combate la deshidratación de las cabinas de avión, la L-triptófano apoya el sueño y la melatonina natural, y el zinc, complejo B, vitamina C y D3 refuerzan tu inmunidad contra los resfriados de viaje.</span><span data-lang="en">1 liter of saline fights dry-cabin dehydration, L-tryptophan supports sleep and natural melatonin, and zinc, B-complex, vitamin C, and D3 strengthen your immunity against travel colds.</span></p>
+            <div class="fb-label"><span data-lang="es">Ingredientes</span><span data-lang="en">Ingredients</span></div>
+            <div class="fb-chips"><span class="fb-chip">0.9% NaCl</span><span class="fb-chip">Vitamin C (ascorbate)</span><span class="fb-chip">Zinc (Zn)</span><span class="fb-chip">B-Complex</span><span class="fb-chip">L-tryptophan</span><span class="fb-chip">Vitamin D3</span><span class="fb-chip">Toradol (ketorolac)</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="section-inner">
-    <div class="eyebrow"><span data-lang="es">Qué Hay Dentro</span><span data-lang="en">What's Inside</span></div>
-    <h2><span data-lang="es">Dentro de Fuente de la <em>Juventud.</em></span><span data-lang="en">Inside Our <em>Signature Drip.</em></span></h2>
-    <p class="lead"><span data-lang="es">Fórmula desarrollada por nuestro equipo médico. 100% de absorción — directa al torrente sanguíneo, sin perder potencia en el sistema digestivo.</span><span data-lang="en">Formula built by our medical team. 100% absorption — straight to the bloodstream, no digestive loss.</span></p>
-    <div class="ing-grid">
-      <div class="ing-card"><h3>Vitamina C</h3><p><span data-lang="es">Inmunidad, antioxidante, brillo en la piel.</span><span data-lang="en">Immunity, antioxidant, skin glow.</span></p></div>
-      <div class="ing-card"><h3><span data-lang="es">Complejo B</span><span data-lang="en">B Complex</span></h3><p><span data-lang="es">Energía celular y enfoque mental.</span><span data-lang="en">Cellular energy and mental focus.</span></p></div>
-      <div class="ing-card"><h3>Glutatión</h3><p><span data-lang="es">El antioxidante maestro — detox y juventud.</span><span data-lang="en">The master antioxidant — detox and youth.</span></p></div>
-      <div class="ing-card"><h3>Biotina</h3><p><span data-lang="es">Cabello, uñas y piel saludables.</span><span data-lang="en">Hair, nails, skin health.</span></p></div>
-      <div class="ing-card"><h3>Magnesio</h3><p><span data-lang="es">Recuperación muscular y mejor sueño.</span><span data-lang="en">Muscle recovery and deeper sleep.</span></p></div>
-      <div class="ing-card"><h3>Zinc</h3><p><span data-lang="es">Inmunidad y producción de colágeno.</span><span data-lang="en">Immunity and collagen production.</span></p></div>
-    </div>
-  </div>
-</section>
-
-<section class="section alt">
   <div class="section-inner">
     <div class="eyebrow"><span data-lang="es">Lo que Vas a Sentir</span><span data-lang="en">What You'll Feel</span></div>
     <h2><span data-lang="es">Resultados en <em>Menos de Una Hora.</em></span><span data-lang="en">Results in <em>Under an Hour.</em></span></h2>
@@ -506,7 +787,7 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
   </div>
 </section>
 
-<section class="section" id="form">
+<section class="section alt" id="form">
   <div class="section-narrow">
     <div class="eyebrow"><span data-lang="es">Reclama tu Descuento</span><span data-lang="en">Claim Your Discount</span></div>
     <h2><span data-lang="es">Reserva tu Sesión con <em>10% Off.</em></span><span data-lang="en">Book Your Session at <em>10% Off.</em></span></h2>
@@ -572,6 +853,13 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
     </div>
   </div>
   <div class="foot-bottom">
+    <span class="foot-legal" style="display:flex;gap:10px;align-items:center;">
+      <a href="https://mattosmedical.com/terms/" style="color:rgba(255,255,255,0.6);text-decoration:none;"><span data-lang="es">Términos</span><span data-lang="en">Terms</span></a>
+      <span style="opacity:0.4;">·</span>
+      <a href="https://mattosmedical.com/privacy/" style="color:rgba(255,255,255,0.6);text-decoration:none;"><span data-lang="es">Privacidad</span><span data-lang="en">Privacy</span></a>
+      <span style="opacity:0.4;">·</span>
+      <a href="https://mattosmedical.com/hipaa/" style="color:rgba(255,255,255,0.6);text-decoration:none;"><span data-lang="es">Aviso HIPAA</span><span data-lang="en">HIPAA Notice</span></a>
+    </span>
     <span>© 2026 Mattos Medical Group. <span data-lang="es">Todos los derechos reservados.</span><span data-lang="en">All rights reserved.</span></span>
     <span><span data-lang="es">Hecho con cuidado en Tampa.</span><span data-lang="en">Made with care in Tampa.</span></span>
   </div>
@@ -661,6 +949,14 @@ document.querySelectorAll('.lang-btn').forEach((btn) => {
     b.addEventListener('click', function(){ try{ localStorage.setItem(KEY, b.dataset.set); }catch(e){} });
   });
   try{ var s=localStorage.getItem(KEY); if(s) apply(s); }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  document.querySelectorAll('.iv-flip').forEach(function(card){
+    card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+    card.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); card.classList.toggle('flipped'); } });
+  });
 })();
 </script>
 </body>
