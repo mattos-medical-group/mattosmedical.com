@@ -145,7 +145,31 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
     <div class="team-grid">
 
       <article class="member">
-        <div style="width:100%;aspect-ratio:4/5;overflow:hidden;border-bottom:1px solid var(--mmg-border);"><img src="../../assets/images/team-victor.webp" alt="Victor Mattos" style="width:100%;height:100%;object-fit:cover;object-position:50% 63%;display:block;transform:scale(1.09);transform-origin:50% 63%;"></div>
+        <div style="position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;border-bottom:1px solid var(--mmg-border);">
+          <img id="victor-img" src="./team-victor.webp" alt="Victor Mattos" style="width:100%;height:100%;object-fit:cover;object-position:50% 63%;display:block;transform:scale(1.09);transform-origin:50% 63%;">
+          <div id="victor-adjuster" style="position:absolute;bottom:8px;left:8px;right:8px;background:rgba(11,30,61,0.85);backdrop-filter:blur(6px);border-radius:10px;padding:10px 12px;font-size:11px;color:#fff;font-family:system-ui,sans-serif;display:none;z-index:10;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span style="font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:10px;color:#4a94d6;">Photo Adjust · Victor</span><button onclick="document.getElementById('victor-adjuster').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:16px;line-height:1;padding:0;">×</button></div>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="width:46px;opacity:0.7;flex-shrink:0;">Scale</span><input type="range" id="v-scale" min="100" max="200" step="1" value="109" style="flex:1;"><span id="v-scale-val" style="width:36px;text-align:right;font-weight:600;">109%</span></label>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="width:46px;opacity:0.7;flex-shrink:0;">X pos</span><input type="range" id="v-x" min="0" max="100" step="1" value="50" style="flex:1;"><span id="v-x-val" style="width:36px;text-align:right;font-weight:600;">50%</span></label>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="width:46px;opacity:0.7;flex-shrink:0;">Y pos</span><input type="range" id="v-y" min="0" max="100" step="1" value="63" style="flex:1;"><span id="v-y-val" style="width:36px;text-align:right;font-weight:600;">63%</span></label>
+            <div style="display:flex;gap:6px;"><button onclick="victorSave()" style="flex:1;background:#2678c0;border:none;color:#fff;padding:6px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">Save</button><button onclick="victorReset()" style="background:none;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.6);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:11px;">Reset</button></div>
+            <div id="victor-copy" style="margin-top:8px;font-size:10px;color:#4a94d6;word-break:break-all;display:none;"></div>
+          </div>
+          <button onclick="document.getElementById('victor-adjuster').style.display='block'" style="position:absolute;top:8px;right:8px;background:rgba(11,30,61,0.75);border:none;color:#fff;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;z-index:9;">⚙ ADJUST</button>
+        </div>
+        <script>
+        (function(){
+          var img=document.getElementById('victor-img');
+          var saved=JSON.parse(localStorage.getItem('victor-crop')||'{"s":109,"x":50,"y":63}');
+          function applyVals(s,x,y){img.style.transform='scale('+s/100+')';img.style.transformOrigin=x+'% '+y+'%';img.style.objectPosition=x+'% '+y+'%';}
+          applyVals(saved.s,saved.x,saved.y);
+          document.getElementById('v-scale').value=saved.s;document.getElementById('v-x').value=saved.x;document.getElementById('v-y').value=saved.y;
+          document.getElementById('v-scale-val').textContent=saved.s+'%';document.getElementById('v-x-val').textContent=saved.x+'%';document.getElementById('v-y-val').textContent=saved.y+'%';
+          ['v-scale','v-x','v-y'].forEach(function(id){document.getElementById(id).addEventListener('input',function(){var s=+document.getElementById('v-scale').value,x=+document.getElementById('v-x').value,y=+document.getElementById('v-y').value;document.getElementById('v-scale-val').textContent=s+'%';document.getElementById('v-x-val').textContent=x+'%';document.getElementById('v-y-val').textContent=y+'%';applyVals(s,x,y);});});
+          window.victorSave=function(){var s=+document.getElementById('v-scale').value,x=+document.getElementById('v-x').value,y=+document.getElementById('v-y').value;localStorage.setItem('victor-crop',JSON.stringify({s:s,x:x,y:y}));var css='transform:scale('+s/100+');transform-origin:'+x+'% '+y+'%;object-position:'+x+'% '+y+'%';document.getElementById('victor-copy').style.display='block';document.getElementById('victor-copy').textContent='✓ Saved · CSS: '+css;};
+          window.victorReset=function(){localStorage.removeItem('victor-crop');applyVals(109,50,63);document.getElementById('v-scale').value=109;document.getElementById('v-x').value=50;document.getElementById('v-y').value=63;document.getElementById('v-scale-val').textContent='109%';document.getElementById('v-x-val').textContent='50%';document.getElementById('v-y-val').textContent='63%';};
+        })();
+        </script>
         <div class="member-body">
           <div class="member-name">Victor Mattos</div>
           <div class="member-role"><span data-lang="es">Fundador & Especialista en Salud y Vitalidad</span><span data-lang="en">Founder & Health and Vitality Specialist</span></div>
