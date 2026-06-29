@@ -330,16 +330,35 @@ body.en h1[data-lang="en"],body.en div[data-lang="en"],body.en p[data-lang="en"]
 .lang-btn{background:transparent;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.6);padding:5px 16px;border-radius:20px;cursor:pointer;font-size:12px;font-family:inherit;letter-spacing:0.8px;}
 .lang-btn.active{background:var(--mmg-blue);border-color:var(--mmg-blue);color:#fff;font-weight:700;}
 
-.nav{background:#fff;border-bottom:1px solid var(--mmg-border);padding:14px 22px;display:flex;align-items:center;gap:22px;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 rgba(11,30,61,0.04);}
-.nav-brand{display:flex;flex-direction:column;align-items:flex-start;text-decoration:none;line-height:1;gap:4px;}
+.nav{background:#fff;border-bottom:1px solid var(--mmg-border);padding:14px 22px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 rgba(11,30,61,0.04);}
+.nav-brand{display:flex;flex-direction:column;align-items:flex-start;text-decoration:none;line-height:1;gap:4px;flex:0 0 auto;}
 .nav-logo{height:38px;width:auto;}
-.nav-tagline{font-size:9.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--mmg-blue);padding-left:2px;}
-.nav-links{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;font-weight:600;letter-spacing:0.3px;}
-.nav-links a{text-decoration:none;color:var(--mmg-navy);padding:6px 0;border-bottom:2px solid transparent;transition:border-color .2s;}
-.nav-links a:hover{border-bottom-color:var(--mmg-blue);}
-.nav-cta{margin-left:auto;background:var(--mmg-grad-cta);color:#fff;padding:10px 22px;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:var(--mmg-shadow-blue);transition:transform .2s;}
+.nav-tagline{font-size:9.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--mmg-blue,#2678c0);padding-left:2px;}
+.nav-links{display:flex;gap:12px;flex-wrap:nowrap;font-size:13px;font-weight:600;letter-spacing:0.3px;}
+.nav-links a{text-decoration:none;color:var(--mmg-navy,#0b1e3d);padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;}
+.nav-links a:hover{color:var(--mmg-navy,#0b1e3d);border-bottom-color:var(--mmg-blue,#2678c0);}
+.nav-links a.active{color:var(--mmg-navy,#0b1e3d);border-bottom-color:var(--mmg-blue,#2678c0);}
+.nav-cta{margin-left:auto;background:var(--mmg-grad-cta);color:#fff;padding:10px 14px;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:var(--mmg-shadow-blue);transition:transform .2s;}
 .nav-cta:hover{transform:translateY(-2px);}
-@media(max-width:760px){.nav-links{display:none;}.nav{gap:14px;}}
+
+/* ─ Mobile nav ─ */
+.nav-hamburger{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5.5px;width:44px;height:44px;background:none;border:none;cursor:pointer;padding:8px;flex-shrink:0;}
+.nav-hamburger span{display:block;height:2px;width:22px;background:var(--mmg-navy,#0b1e3d);border-radius:2px;transition:transform .25s,opacity .25s;}
+.nav-mob-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(11,30,61,0.5);}
+.nav-mob-overlay.is-open{display:block;}
+.nav-mob-panel{position:absolute;top:0;right:0;width:min(300px,85vw);height:100%;background:#fff;box-shadow:-6px 0 40px rgba(0,0,0,0.22);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,.84,.44,1);}
+.nav-mob-overlay.is-open .nav-mob-panel{transform:translateX(0);}
+.nav-mob-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #ddd8cc;}
+.nav-mob-title{font-size:14px;font-weight:700;color:#0b1e3d;}
+.nav-mob-close{background:none;border:none;width:36px;height:36px;font-size:22px;cursor:pointer;color:#0b1e3d;display:flex;align-items:center;justify-content:center;}
+.nav-mob-links{flex:1;overflow-y:auto;padding:8px 0;}
+.nav-mob-links a{display:block;font-size:16px;font-weight:600;color:#2d3d50;text-decoration:none;padding:15px 24px;border-bottom:1px solid #f0ede6;white-space:normal;margin:0;}
+.nav-mob-links a:hover{background:#f6f4ef;color:#0b1e3d;}
+.nav-mob-links a.active{color:#2678c0;}
+.nav-mob-foot{padding:16px 20px 28px;display:flex;flex-direction:column;gap:10px;border-top:1px solid #ddd8cc;}
+.nav-mob-book{display:block;background:linear-gradient(135deg,#2678c0,#4a94d6);color:#fff;padding:14px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;text-align:center;box-shadow:0 6px 18px rgba(38,120,192,0.32);}
+.nav-mob-phone{display:block;color:#0b1e3d;font-size:14px;font-weight:600;text-decoration:none;text-align:center;padding:8px;}
+@media(max-width:768px){.nav-links{display:none;}.nav-cta{display:none;}.nav-shop{display:none;}.nav-hamburger{display:flex;margin-left:auto;}}
 
 .hero{background:var(--mmg-grad-hero);padding:64px 22px 72px;text-align:center;position:relative;overflow:hidden;color:#fff;}
 .hero::before{content:'';position:absolute;top:-90px;right:-90px;width:360px;height:360px;background:radial-gradient(circle,rgba(38,120,192,0.14),transparent 70%);border-radius:50%;}
@@ -434,15 +453,39 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
     <span class="nav-tagline"><span data-lang="es">Medicina Regenerativa · Tampa, FL</span><span data-lang="en">Regenerative Medicine · Tampa, FL</span></span>
   </a>
   <div class="nav-links">
-    <a href="https://mattosmedical.com/#servicios"><span data-lang="es">Servicios</span><span data-lang="en">Services</span></a>
-    <a href="https://mattosmedical.com/#nosotros"><span data-lang="es">Nosotros</span><span data-lang="en">About</span></a>
-    <a href="https://mattosmedical.com/supplementfinder/" target="_blank" rel="noopener"><span data-lang="es">Suplementos</span><span data-lang="en">Supplements</span></a>
-    <a href="https://mattosmedical.com/blog/">Blog</a>
-    <a href="https://mattosmedical.com/#faq">FAQ</a>
-    <a href="https://mattosmedical.com/#contacto"><span data-lang="es">Contacto</span><span data-lang="en">Contact</span></a>
+    <a href="/#servicios" class="active"><span data-lang="es">Servicios</span><span data-lang="en">Services</span></a>
+    <a href="/team/"><span data-lang="es">Equipo</span><span data-lang="en">Our Team</span></a>
+    <a href="/supplementfinder/"><span data-lang="es">Suplementos</span><span data-lang="en">Supplements</span></a>
+    <a href="/blog/">Blog</a>
+    <a href="/#faq">FAQ</a>
+    <a href="/#contacto"><span data-lang="es">Contacto</span><span data-lang="en">Contact</span></a>
   </div>
   <a class="nav-cta" href="https://mattosmedical.com/#contacto"><span data-lang="es">Reserva tu consulta</span><span data-lang="en">Book a consult</span></a>
+
+  <button class="nav-hamburger" id="mmgHbg" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="nav-mob-overlay" id="mmgMob" role="dialog" aria-modal="true">
+  <div class="nav-mob-panel">
+    <div class="nav-mob-head">
+      <span class="nav-mob-title">Mattos Medical Group</span>
+      <button class="nav-mob-close" id="mmgMobClose" aria-label="Cerrar">&times;</button>
+    </div>
+    <nav class="nav-mob-links">
+      <a href="/#servicios" class="active"><span data-lang="es">Servicios</span><span data-lang="en">Services</span></a>
+    <a href="/team/"><span data-lang="es">Equipo</span><span data-lang="en">Our Team</span></a>
+    <a href="/supplementfinder/"><span data-lang="es">Suplementos</span><span data-lang="en">Supplements</span></a>
+    <a href="/blog/">Blog</a>
+    <a href="/#faq">FAQ</a>
+    <a href="/#contacto"><span data-lang="es">Contacto</span><span data-lang="en">Contact</span></a>
+    </nav>
+    <div class="nav-mob-foot">
+      <a class="nav-mob-book" href="/#contacto"><span data-lang="es">Reservar Consulta</span><span data-lang="en">Book a Consult</span></a>
+      <a class="nav-mob-phone" href="tel:+18138712950">(813) 871-2950</a>
+    </div>
+  </div>
+</div>
 
 <style>
 .legal-hero{background:var(--mmg-grad-dark);color:#fff;padding:56px 22px 44px;text-align:center;}
@@ -646,6 +689,23 @@ document.querySelectorAll('.lang-btn').forEach((btn) => {
     b.addEventListener('click', function(){ try{ localStorage.setItem(KEY, b.dataset.set); }catch(e){} });
   });
   try{ var s=localStorage.getItem(KEY); if(s) apply(s); }catch(e){}
+})();
+</script>
+
+<script>
+(function(){
+  var btn=document.getElementById('mmgHbg');
+  var ov=document.getElementById('mmgMob');
+  if(!btn||!ov)return;
+  function openMenu(){ov.classList.add('is-open');btn.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}
+  function closeMenu(){ov.classList.remove('is-open');btn.setAttribute('aria-expanded','false');document.body.style.overflow='';}
+  btn.addEventListener('click',openMenu);
+  document.getElementById('mmgMobClose').addEventListener('click',closeMenu);
+  ov.addEventListener('click',function(e){if(e.target===ov)closeMenu();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu();});
+  ov.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){if(a.getAttribute('target')!=='_blank')closeMenu();});
+  });
 })();
 </script>
 </body>
