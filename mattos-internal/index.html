@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Internal · Mattos Medical Group</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0b1e3d;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+
+/* LOCK SCREEN */
+.lock{position:fixed;inset:0;background:#0b1e3d;display:flex;align-items:center;justify-content:center;z-index:1000;transition:opacity .3s}
+.lock.hidden{opacity:0;pointer-events:none}
+.lock-box{background:#fff;border-radius:16px;padding:48px 40px;width:100%;max-width:380px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.lock-logo{height:32px;margin-bottom:28px}
+.lock-title{font-size:20px;font-weight:700;color:#0b1e3d;margin-bottom:6px}
+.lock-sub{font-size:14px;color:#6b7280;margin-bottom:28px}
+.lock-input{width:100%;padding:12px 16px;font-size:16px;border:1.5px solid #e5e7eb;border-radius:10px;outline:none;text-align:center;letter-spacing:3px;font-family:inherit;transition:border-color .15s}
+.lock-input:focus{border-color:#2678c0}
+.lock-btn{margin-top:14px;width:100%;padding:13px;background:#0b1e3d;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+.lock-btn:hover{background:#1a3a6b}
+.lock-err{margin-top:10px;font-size:13px;color:#dc2626;min-height:18px}
+.lock-icon{width:48px;height:48px;background:#e8f0fb;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+
+/* MAIN */
+.main{flex:1;opacity:0;transition:opacity .3s;pointer-events:none}
+.main.visible{opacity:1;pointer-events:all}
+
+/* NAV */
+.nav{background:#0b1e3d;height:58px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(0,0,0,.35)}
+.nav-logo{height:26px}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-badge{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:20px}
+.logout-btn{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);padding:5px 14px;border-radius:20px;cursor:pointer;font-size:12px;font-family:inherit;transition:all .15s}
+.logout-btn:hover{border-color:rgba(255,255,255,.5);color:#fff}
+
+/* CONTENT */
+.content{max-width:1100px;margin:0 auto;padding:36px 32px 80px}
+.page-hd{margin-bottom:32px}
+.page-title{font-size:28px;font-weight:700;color:#fff;margin-bottom:6px}
+.page-sub{font-size:15px;color:rgba(255,255,255,.5)}
+
+/* SECTION */
+.section{margin-bottom:40px}
+.section-label{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+
+/* TOOL CARD */
+.tool-card{background:#fff;border-radius:14px;padding:24px;display:flex;align-items:flex-start;gap:16px;text-decoration:none;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.tool-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.tool-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tool-icon.blue{background:#e8f0fb;color:#2678c0}
+.tool-icon.green{background:#e6f4ef;color:#1a9e6e}
+.tool-icon.amber{background:#fdf3e0;color:#b07010}
+.tool-icon.purple{background:#ede6f9;color:#6a3fbf}
+.tool-icon.slate{background:#f0f0f4;color:#4a5568}
+.tool-name{font-size:15px;font-weight:700;color:#0b1e3d;margin-bottom:3px}
+.tool-desc{font-size:13px;color:#6b7280;line-height:1.5}
+.tool-url{font-size:11px;color:#a0aec0;margin-top:6px;font-family:monospace}
+
+/* COMING SOON */
+.tool-card.soon{opacity:.55;cursor:default}
+.tool-card.soon:hover{transform:none;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.soon-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;background:#e5e7eb;color:#9ca3af;padding:2px 8px;border-radius:20px;margin-top:6px}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div class="lock" id="lockScreen">
+  <div class="lock-box">
+    <div class="lock-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2678c0" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    </div>
+    <img class="lock-logo" src="https://mattosmedical.com/assets/logos/mmg-logo.png" alt="MMG" onerror="this.style.display='none'">
+    <div class="lock-title">Internal Access</div>
+    <div class="lock-sub">Enter the password to continue</div>
+    <input class="lock-input" type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="lock-btn" onclick="checkPw()">Enter</button>
+    <div class="lock-err" id="pwErr"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="mainContent">
+  <nav class="nav">
+    <img class="nav-logo" src="https://mattosmedical.com/assets/logos/mmg-logo.png" alt="Mattos Medical Group" onerror="this.style.display='none'">
+    <div class="nav-right">
+      <div class="nav-badge">Internal</div>
+      <button class="logout-btn" onclick="logout()">Lock</button>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="page-hd">
+      <div class="page-title">Internal Tools</div>
+      <div class="page-sub">Staff-only pages — do not share this link publicly.</div>
+    </div>
+
+    <!-- OPERATIONS -->
+    <div class="section">
+      <div class="section-label">Operations</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://mattosmedical.com/timeclock/" target="_blank">
+          <div class="tool-icon blue">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div class="tool-name">Employee Time Clock</div>
+            <div class="tool-desc">Clock in/out, timesheets, payroll summaries &amp; 1099 export.</div>
+            <div class="tool-url">mattosmedical.com/timeclock</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- CLINICAL TOOLS -->
+    <div class="section">
+      <div class="section-label">Clinical Tools</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://mattosmedical.com/peptidecalc/" target="_blank">
+          <div class="tool-icon green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+          </div>
+          <div>
+            <div class="tool-name">Peptide Calculator</div>
+            <div class="tool-desc">Reconstitution, blend, accumulation &amp; synergy guide. ES/EN.</div>
+            <div class="tool-url">mattosmedical.com/peptidecalc</div>
+          </div>
+        </a>
+        <div class="tool-card soon">
+          <div class="tool-icon slate">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div>
+            <div class="tool-name">Protocol Builder</div>
+            <div class="tool-desc">Build and save patient peptide protocols.</div>
+            <div class="soon-badge">Coming soon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATIENT RESOURCES -->
+    <div class="section">
+      <div class="section-label">Patient-Facing Tools</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://mattosmedical.com/supplementfinder/" target="_blank">
+          <div class="tool-icon amber">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div>
+            <div class="tool-name">Supplement Finder</div>
+            <div class="tool-desc">Interactive quiz to match patients with the right supplements.</div>
+            <div class="tool-url">mattosmedical.com/supplementfinder</div>
+          </div>
+        </a>
+        <a class="tool-card" href="https://mattosmedical.com/team/" target="_blank">
+          <div class="tool-icon purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div>
+            <div class="tool-name">Team Page</div>
+            <div class="tool-desc">Staff bios and provider profiles.</div>
+            <div class="tool-url">mattosmedical.com/team</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="section">
+      <div class="section-label">Admin</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://mattosmedical.com/googlesheets/" target="_blank">
+          <div class="tool-icon blue">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+          </div>
+          <div>
+            <div class="tool-name">Google Sheets Setup</div>
+            <div class="tool-desc">Configure sync endpoints for the time clock and other tools.</div>
+            <div class="tool-url">mattosmedical.com/googlesheets</div>
+          </div>
+        </a>
+        <div class="tool-card soon">
+          <div class="tool-icon slate">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="tool-name">Admin Dashboard</div>
+            <div class="tool-desc">Analytics, leads, and reporting.</div>
+            <div class="soon-badge">Coming soon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var PW = 'mmg2026';
+var KEY = 'mmg_internal_auth';
+
+function checkPw() {
+  var val = document.getElementById('pwInput').value;
+  var err = document.getElementById('pwErr');
+  if (val === PW) {
+    try { sessionStorage.setItem(KEY, '1'); } catch(e){}
+    unlock();
+  } else {
+    err.textContent = 'Incorrect password. Try again.';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function unlock() {
+  document.getElementById('lockScreen').classList.add('hidden');
+  document.getElementById('mainContent').classList.add('visible');
+}
+
+function logout() {
+  try { sessionStorage.removeItem(KEY); } catch(e){}
+  document.getElementById('lockScreen').classList.remove('hidden');
+  document.getElementById('mainContent').classList.remove('visible');
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwErr').textContent = '';
+}
+
+// Auto-unlock if already authenticated this session
+(function(){
+  try {
+    if (sessionStorage.getItem(KEY) === '1') { unlock(); return; }
+  } catch(e){}
+  document.getElementById('pwInput').focus();
+})();
+</script>
+</body>
+</html>
