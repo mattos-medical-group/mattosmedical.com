@@ -522,7 +522,9 @@ body{font-family:var(--mmg-font-body);background:var(--mmg-off-white);color:var(
     <div class="fi-row"><div class="fg"><label class="fl">City</label><input class="fi" type="text" id="ae-city"></div>
       <div class="fg" style="max-width:80px"><label class="fl">State</label><input class="fi" type="text" id="ae-state" maxlength="2" placeholder="FL"></div>
       <div class="fg" style="max-width:110px"><label class="fl">ZIP</label><input class="fi" type="text" id="ae-zip" placeholder="33101"></div></div>
-    <div class="fg" style="max-width:220px"><label class="fl">SSN / EIN</label><input class="fi" type="text" id="ae-taxid" placeholder="XXX-XX-XXXX"></div>
+    <div class="fg" style="max-width:260px"><label class="fl">SSN / EIN</label>
+      <div style="position:relative"><input class="fi" type="password" id="ae-taxid" placeholder="XXX-XX-XXXX" autocomplete="off" style="padding-right:42px">
+      <button type="button" onclick="toggleSSN('ae-taxid',this)" title="Reveal (admin password required)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;line-height:1;padding:4px;opacity:.55">👁</button></div></div>
     <div class="modal-foot">
       <button class="btn btn-outline" onclick="closeModal('o-add-emp')">Cancel</button>
       <button class="btn btn-primary" onclick="saveNewEmp()">Add Employee</button>
@@ -568,7 +570,9 @@ body{font-family:var(--mmg-font-body);background:var(--mmg-off-white);color:var(
     <div class="fi-row"><div class="fg"><label class="fl">City</label><input class="fi" type="text" id="ee-city"></div>
       <div class="fg" style="max-width:80px"><label class="fl">State</label><input class="fi" type="text" id="ee-state" maxlength="2"></div>
       <div class="fg" style="max-width:110px"><label class="fl">ZIP</label><input class="fi" type="text" id="ee-zip"></div></div>
-    <div class="fg" style="max-width:220px"><label class="fl">SSN / EIN</label><input class="fi" type="text" id="ee-taxid"></div>
+    <div class="fg" style="max-width:260px"><label class="fl">SSN / EIN</label>
+      <div style="position:relative"><input class="fi" type="password" id="ee-taxid" placeholder="XXX-XX-XXXX" autocomplete="off" style="padding-right:42px">
+      <button type="button" onclick="toggleSSN('ee-taxid',this)" title="Reveal (admin password required)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;line-height:1;padding:4px;opacity:.55">👁</button></div></div>
     <div class="modal-foot">
       <button class="btn btn-outline" onclick="closeModal('o-edit-emp')">Cancel</button>
       <button class="btn btn-primary" onclick="saveEditEmp()">Save Changes</button>
@@ -1042,6 +1046,21 @@ function deleteEP(id) {
 }
 
 // ── Salary helpers ──────────────────────────────────────────────
+// Masked SSN/EIN reveal — requires the admin password.
+function toggleSSN(id, btn){
+  const el=document.getElementById(id);
+  if(el.type==='password'){
+    const adminPw=(getEmps().find(e=>e.role==='admin')||{}).password;
+    const entry=prompt('Enter admin password to reveal the SSN / EIN:');
+    if(entry==null)return;
+    if(entry!==adminPw){alert('Incorrect admin password.');return;}
+    el.type='text';
+    if(btn){btn.style.opacity='1';btn.title='Hide';}
+  }else{
+    el.type='password';
+    if(btn){btn.style.opacity='.55';btn.title='Reveal (admin password required)';}
+  }
+}
 function toggleEmpType(pfx) {
   const t=document.getElementById(pfx+'-type').value;
   document.getElementById(pfx+'-rate-row').style.display=t==='salary'?'none':'';
@@ -1572,6 +1591,7 @@ function closeModal(id) { document.getElementById(id).classList.remove('on'); }
 function openAddEmp() {
   ['ae-name','ae-user','ae-pass','ae-rate','ae-salary','ae-salary-start','ae-street','ae-city','ae-state','ae-zip','ae-taxid'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
   document.getElementById('ae-type').value='hourly';
+  document.getElementById('ae-taxid').type='password';
   toggleEmpType('ae');
   document.getElementById('add-err').style.display='none';
   openModal('o-add-emp');
@@ -1616,6 +1636,7 @@ function openEditEmp(eid) {
   document.getElementById('ee-state').value  =emp.state||'';
   document.getElementById('ee-zip').value    =emp.zip||'';
   document.getElementById('ee-taxid').value  =emp.taxId||'';
+  document.getElementById('ee-taxid').type='password';
   toggleEmpType('ee');
   document.getElementById('edit-err').style.display='none';
   openModal('o-edit-emp');
