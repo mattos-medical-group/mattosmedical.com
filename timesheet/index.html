@@ -493,7 +493,11 @@ body{font-family:var(--mmg-font-body);background:var(--mmg-off-white);color:var(
           <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap">
             <div class="fg" style="min-width:140px;margin:0"><label class="fl">Tax Year</label>
               <select class="fi" id="yr-select" onchange="render1099Tab()"></select></div>
-            <p style="font-size:13px;color:var(--mmg-text-muted);padding-bottom:2px;flex:1">Annual non-employee compensation totals for 1099-NEC filing. Confirm with your accountant before filing.</p>
+            <p style="font-size:13px;color:var(--mmg-text-muted);padding-bottom:2px;flex:1;min-width:200px">Annual non-employee compensation totals for 1099-NEC filing. Confirm with your accountant before filing.</p>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-outline btn-sm" onclick="exportIntuitCSV()">↓ Export for QuickBooks / Intuit</button>
+              <button class="btn btn-outline btn-sm" onclick="printAll1099()">Print All Worksheets</button>
+            </div>
           </div>
         </div>
         <div id="t1099-result"></div>
@@ -1534,9 +1538,50 @@ function render1099Tab() {
     <td><strong>${fmtMoney(pay)}</strong>${extraPay>0?`<br><span style="font-size:11px;color:var(--mmg-text-muted)">${fmtMoney(basePay)} base + ${fmtMoney(extraPay)} extra</span>`:''}</td>
     <td>${hasInfo?'<span class="badge bdg-g">On file</span>':'<span class="badge bdg-r">Missing</span>'}</td>
     <td style="text-align:right;white-space:nowrap">
-    <button class="btn btn-primary btn-sm" onclick="print1099('${emp.id}',${yr})">Print 1099</button></td></tr>`).join('')}
+    <button class="btn btn-primary btn-sm" onclick="print1099('${emp.id}',${yr})">Print Worksheet</button></td></tr>`).join('')}
   <tr style="background:var(--mmg-off-white)"><td colspan="3" style="font-weight:700">Total NEC</td><td colspan="3" style="font-weight:700">${fmtMoney(total)}</td></tr>
   </tbody></table></div>`;
+}
+
+// Compensation (base pay + extra pay) for one employee in a year.
+function comp1099ForYear(emp, yr){
+  let pay;
+  if(emp.employmentType==='salary') pay=salaryCompForYear(emp,yr);
+  else {
+    const yrEntries=getEntries().filter(e=>e.employeeId===emp.id&&e.clockOut&&new Date(e.clockIn).getFullYear()===yr);
+    pay=grossForEntries(emp,yrEntries);
+  }
+  return pay + extraPayForYear(emp.id,yr);
+}
+// CSV export in Intuit / QuickBooks 1099 import layout.
+function exportIntuitCSV(){
+  const yr=parseInt(document.getElementById('yr-select').value);
+  const biz=getSettings();
+  const emps=getEmps().filter(e=>e.role!=='admin'&&comp1099ForYear(e,yr)>0);
+  if(!emps.length){alert('No compensation to export for '+yr+'.');return;}
+  const esc=v=>{v=(v==null?'':String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+  const headers=['Vendor Name','First Name','Last Name','Tax ID (SSN/EIN)','Address','City','State','ZIP','Box 1 Nonemployee Compensation','Tax Year','Payer Name','Payer TIN'];
+  const lines=[headers.join(',')];
+  emps.forEach(emp=>{
+    const amt=comp1099ForYear(emp,yr).toFixed(2);
+    const parts=(emp.name||'').trim().split(/\s+/);
+    const first=parts.length>1?parts.slice(0,-1).join(' '):(parts[0]||'');
+    const last=parts.length>1?parts[parts.length-1]:'';
+    lines.push([emp.name,first,last,emp.taxId||'',emp.street||'',emp.city||'',emp.state||'',emp.zip||'',amt,yr,biz.businessName||'',biz.businessTaxId||''].map(esc).join(','));
+  });
+  const blob=new Blob([lines.join('\r\n')],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`1099-NEC_${yr}_Intuit_Import.csv`;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+// Print every employee with compensation in the year (one 1099 per window).
+function printAll1099(){
+  const yr=parseInt(document.getElementById('yr-select').value);
+  const emps=getEmps().filter(e=>e.role!=='admin'&&comp1099ForYear(e,yr)>0);
+  if(!emps.length){alert('No 1099s to print for '+yr+'.');return;}
+  emps.forEach((emp,i)=>setTimeout(()=>print1099(emp.id,yr),i*400));
 }
 
 function print1099(eid, yr) {
@@ -1553,9 +1598,9 @@ function print1099(eid, yr) {
   const payStr=pay.toFixed(2);
   const bizAddr=[biz.businessAddress,biz.businessCity&&biz.businessState?`${biz.businessCity}, ${biz.businessState} ${biz.businessZip}`:''].filter(Boolean).join('\n');
   const empAddr=[emp.street,emp.city&&emp.state?`${emp.city}, ${emp.state} ${emp.zip}`:''].filter(Boolean).join('\n');
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>1099-NEC ${yr} - ${emp.name}</title>
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>1099-NEC Worksheet ${yr} - ${emp.name}</title>
 <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#f5f5f5;display:flex;align-items:flex-start;justify-content:center;padding:30px;min-height:100vh}.wrap{background:#fff;width:720px;border:2px solid #333}.hd{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 14px;background:#e8e8e8;border-bottom:2px solid #333}.hd-l .t1{font-size:18px;font-weight:700}.hd-l .t2{font-size:9px;color:#666;margin-top:2px}.hd-l .t3{font-size:11px;font-weight:600;margin-top:4px}.hd-r{text-align:right}.hd-r .yr{font-size:36px;font-weight:700}.hd-r .ys{font-size:10px;color:#666}.grid{display:grid;grid-template-columns:1fr 1fr}.cell{padding:9px 12px;border-right:1px solid #aaa;border-bottom:1px solid #aaa;min-height:60px}.cell.full{grid-column:1/-1;border-right:none}.cell.last{border-right:none}.lbl{font-size:9px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.val{font-size:13px;font-weight:600;line-height:1.5;white-space:pre-line}.boxes{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid #333}.box{padding:10px 12px;border-right:1px solid #aaa}.box.last{border-right:none}.bn{font-size:9px;font-weight:700;color:#333;margin-bottom:4px}.bv{font-size:20px;font-weight:700}.note{font-size:9px;color:#999;padding:8px 12px;border-top:1px solid #ccc;background:#fafafa;text-align:center}.actions{display:flex;gap:12px;justify-content:center;padding:18px;background:#f0f0f0;border-top:1px solid #ccc}.btn{padding:10px 28px;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;border:none}.btn-p{background:#1a5fa8;color:#fff}.btn-c{background:#e0e0e0;color:#333}@media print{body{background:#fff;padding:0}.actions{display:none}.wrap{border:none;width:100%}}</style></head><body>
-<div class="wrap"><div class="hd"><div class="hd-l"><div class="t1">Form 1099-NEC</div><div class="t2">OMB No. 1545-0116</div><div class="t3">Nonemployee Compensation</div></div><div class="hd-r"><div class="yr">${yr}</div><div class="ys">Tax Year</div></div></div>
+<div class="wrap"><div class="hd"><div class="hd-l"><div class="t1">1099-NEC Worksheet</div><div class="t2">Reference summary — not an official IRS form</div><div class="t3">Nonemployee Compensation</div></div><div class="hd-r"><div class="yr">${yr}</div><div class="ys">Tax Year</div></div></div>
 <div class="grid"><div class="cell full"><div class="lbl">Payer's Name, Address, City, State, ZIP</div><div class="val">${biz.businessName||'—'}\n${bizAddr||'(Address not set — update in Settings)'}</div></div>
 <div class="cell"><div class="lbl">Payer's TIN</div><div class="val">${biz.businessTaxId||'Not provided'}</div></div>
 <div class="cell last"><div class="lbl">Recipient's TIN</div><div class="val">${emp.taxId||'Not provided'}</div></div>
@@ -1563,7 +1608,7 @@ function print1099(eid, yr) {
 <div class="boxes"><div class="box"><div class="bn">1 — Nonemployee Compensation</div><div class="bv">$${payStr}</div></div>
 <div class="box"><div class="bn">2 — Direct Sales of $5,000+</div><div class="bv" style="color:#aaa">□ Yes</div></div>
 <div class="box last"><div class="bn">4 — Federal Income Tax Withheld</div><div class="bv">$0.00</div></div></div>
-<div class="note">Reference copy generated by MMG Time Clock · Not an official IRS form · Consult your accountant before filing</div>
+<div class="note">1099-NEC Worksheet generated by MMG Time Clock · <strong>Not an official IRS form — do not mail to the IRS.</strong> · For your records / your contractor / your accountant. File through QuickBooks/Intuit or your accountant.</div>
 <div class="actions"><button class="btn btn-c" onclick="window.close()">Close</button><button class="btn btn-p" onclick="window.print()">Print / Save PDF</button></div></div></body></html>`;
   const w=window.open('','_blank','width=820,height=680'); w.document.write(html); w.document.close();
 }
