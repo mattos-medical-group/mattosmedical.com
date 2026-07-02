@@ -1586,9 +1586,41 @@ function seedEmployeeData() {
 }
 
 // ── Init ─────────────────────────────────────────────────────────
+// One-time cleanup: close orphaned open shifts + remove named demo employees
+const _DEMO_USERNAMES = []; // add demo usernames here to auto-remove them
+const _DEMO_NAMES = ['maria garcia','james carter']; // matched case-insensitively
+function runCleanup() {
+  // Close any stuck "clocked in" entries left open (fixes phantom "1 clocked in")
+  const entries = getEntries();
+  let touched = false;
+  entries.forEach(e => {
+    if (e.clockOut == null) {
+      // close at clockIn + 8h, but never in the future
+      e.clockOut = Math.min(e.clockIn + 8*3600000, Date.now());
+      touched = true;
+    }
+  });
+  if (touched) { saveEntriesL(entries); if (GS.ok()) pushEntries(entries); }
+
+  // Remove demo employees by username or name (and their entries + extra pay)
+  const emps = getEmps();
+  const demoIds = emps.filter(e =>
+    _DEMO_USERNAMES.includes(e.username) ||
+    _DEMO_NAMES.includes((e.name||'').trim().toLowerCase())
+  ).map(e => e.id);
+  if (demoIds.length) {
+    const keptEmps = emps.filter(e => !demoIds.includes(e.id));
+    const keptEntries = getEntries().filter(e => !demoIds.includes(e.employeeId));
+    const keptEP = getExtraPay().filter(e => !demoIds.includes(e.employeeId));
+    saveEmpsL(keptEmps); saveEntriesL(keptEntries); saveExtraPayL(keptEP);
+    if (GS.ok()) { pushEmps?.(keptEmps); pushEntries(keptEntries); saveExtraPayData?.(keptEP); }
+  }
+}
+
 function init() {
   initData();
   seedEmployeeData();
+  runCleanup();
   document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
   ['lu','lp'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();}));
   setSyncStatus(GS.ok()?'synced':'off');
