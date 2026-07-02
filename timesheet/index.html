@@ -766,9 +766,12 @@ const saveExtraPayL= v  => localStorage.setItem(K.ep, JSON.stringify(v));
 function saveExtraPayData(v){saveExtraPayL(v);if(GS.ok())GS.post('writeExtraPay',v).catch(()=>{});}
 
 // ── Google Sheets API ────────────────────────────────────────────
+// Built-in default so every browser syncs automatically with no setup.
+// A browser can still override this via Settings (stored in localStorage).
+const GS_DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbyAYafXGEjKuPRB_7cFETlq6m6-OniysvU_D1pUmUqHMjEsBEzg2mT8t57ltIOWppCD2w/exec';
 const GS = {
-  url: () => localStorage.getItem(K.gsUrl) || '',
-  ok:  () => !!localStorage.getItem(K.gsUrl),
+  url: () => localStorage.getItem(K.gsUrl) || GS_DEFAULT_URL || '',
+  ok:  () => !!(localStorage.getItem(K.gsUrl) || GS_DEFAULT_URL),
   post: async (action, data) => {
     const url = GS.url();
     if (!url) return null;
@@ -1618,7 +1621,7 @@ let _delId=null;
 function openModal(id) {
   if(id==='o-settings') {
     const s=getSettings();
-    document.getElementById('bs-gs-url').value  = localStorage.getItem(K.gsUrl)||'';
+    document.getElementById('bs-gs-url').value  = localStorage.getItem(K.gsUrl)||GS_DEFAULT_URL||'';
     document.getElementById('bs-name').value    = s.businessName||'';
     document.getElementById('bs-street').value  = s.businessAddress||'';
     document.getElementById('bs-city').value    = s.businessCity||'';
@@ -1626,7 +1629,7 @@ function openModal(id) {
     document.getElementById('bs-zip').value     = s.businessZip||'';
     document.getElementById('bs-ein').value     = s.businessTaxId||'';
     // reflect current sync status in settings dot
-    const cur=localStorage.getItem(K.gsUrl)?'synced':'off';
+    const cur=GS.ok()?'synced':'off';
     setSyncStatus(cur);
   }
   document.getElementById(id).classList.add('on');
