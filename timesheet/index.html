@@ -465,11 +465,11 @@ body{font-family:var(--mmg-font-body);background:var(--mmg-off-white);color:var(
           <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end">
             <div class="fg" style="flex:1;min-width:180px;margin:0"><label class="fl">Employee</label>
               <select class="fi" id="ts-emp" onchange="renderTS()"><option value="">Select employee...</option></select></div>
-            <div class="fg" style="flex:1;min-width:160px;margin:0"><label class="fl">Week of (Sunday)</label>
+            <div class="fg" style="flex:1;min-width:160px;margin:0"><label class="fl">Check Date</label>
               <input type="date" class="fi" id="ts-week" onchange="renderTS()"></div>
           </div>
         </div>
-        <div id="ts-result"><div class="empty">Select an employee and week to view time entries.</div></div>
+        <div id="ts-result"><div class="empty">Select an employee and check date to view time entries.</div></div>
       </div>
 
       <div id="tab-payroll" class="tab">
@@ -515,7 +515,8 @@ body{font-family:var(--mmg-font-body);background:var(--mmg-off-white);color:var(
     <div class="fi-row"><div class="fg"><label class="fl">Temporary Password</label><input class="fi" type="password" id="ae-pass"></div>
       <div class="fg"><label class="fl">Employment Type</label><select class="fi" id="ae-type" onchange="toggleEmpType('ae')"><option value="hourly">Hourly (1099)</option><option value="salary">Salary (1099)</option></select></div></div>
     <div class="fi-row" id="ae-rate-row"><div class="fg"><label class="fl">Hourly Rate ($/hr)</label><input class="fi" type="number" id="ae-rate" placeholder="22.50" step="0.01" min="0"></div></div>
-    <div class="fi-row" id="ae-salary-row" style="display:none"><div class="fg"><label class="fl">Annual Salary ($)</label><input class="fi" type="number" id="ae-salary" placeholder="120000" step="100" min="0"></div></div>
+    <div class="fi-row" id="ae-salary-row" style="display:none"><div class="fg"><label class="fl">Annual Salary ($)</label><input class="fi" type="number" id="ae-salary" placeholder="120000" step="100" min="0"></div>
+      <div class="fg"><label class="fl">Salary Start Date</label><input class="fi" type="date" id="ae-salary-start"></div></div>
     <div class="sect-ttl">Tax Info (for 1099 — optional)</div>
     <div class="fg"><label class="fl">Street Address</label><input class="fi" type="text" id="ae-street" placeholder="123 Main St"></div>
     <div class="fi-row"><div class="fg"><label class="fl">City</label><input class="fi" type="text" id="ae-city"></div>
@@ -539,8 +540,29 @@ body{font-family:var(--mmg-font-body);background:var(--mmg-off-white);color:var(
       <div class="fg"><label class="fl">Username</label><input class="fi" type="text" id="ee-user"></div></div>
     <div class="fi-row"><div class="fg"><label class="fl">New Password</label><input class="fi" type="password" id="ee-pass" placeholder="Leave blank to keep current"></div>
       <div class="fg"><label class="fl">Employment Type</label><select class="fi" id="ee-type" onchange="toggleEmpType('ee')"><option value="hourly">Hourly (1099)</option><option value="salary">Salary (1099)</option></select></div></div>
-    <div class="fi-row" id="ee-rate-row"><div class="fg"><label class="fl">Hourly Rate ($/hr)</label><input class="fi" type="number" id="ee-rate" step="0.01" min="0"></div></div>
-    <div class="fi-row" id="ee-salary-row" style="display:none"><div class="fg"><label class="fl">Annual Salary ($)</label><input class="fi" type="number" id="ee-salary" placeholder="120000" step="100" min="0"></div></div>
+    <div class="fi-row" id="ee-rate-row">
+      <div class="fg"><label class="fl">Current Hourly Rate ($/hr)</label><input class="fi" type="number" id="ee-rate" step="0.01" min="0"></div>
+    </div>
+    <div id="ee-rate-mgr" style="margin:-4px 0 4px">
+      <div id="ee-rate-history"></div>
+      <div class="sect-ttl" style="font-size:12px;margin-top:10px">Log a Pay Change</div>
+      <div class="fi-row">
+        <div class="fg"><label class="fl">New Rate ($/hr)</label><input class="fi" type="number" id="ee-new-rate" placeholder="e.g. 26.00" step="0.01" min="0"></div>
+        <div class="fg"><label class="fl">Effective Date</label><input class="fi" type="date" id="ee-new-rate-date"></div>
+      </div>
+      <p style="font-size:12px;color:var(--mmg-text-muted);margin-top:-4px">Hours before the effective date stay at the old rate — past pay and 1099 totals won't change.</p>
+    </div>
+    <div class="fi-row" id="ee-salary-row" style="display:none"><div class="fg"><label class="fl">Current Annual Salary ($)</label><input class="fi" type="number" id="ee-salary" placeholder="120000" step="100" min="0"></div>
+      <div class="fg"><label class="fl">Salary Start Date</label><input class="fi" type="date" id="ee-salary-start"></div></div>
+    <div id="ee-salary-mgr" style="display:none;margin:-4px 0 4px">
+      <div id="ee-salary-history"></div>
+      <div class="sect-ttl" style="font-size:12px;margin-top:10px">Log a Pay Change</div>
+      <div class="fi-row">
+        <div class="fg"><label class="fl">New Annual Salary ($)</label><input class="fi" type="number" id="ee-new-salary" placeholder="e.g. 135000" step="100" min="0"></div>
+        <div class="fg"><label class="fl">Effective Date</label><input class="fi" type="date" id="ee-new-salary-date"></div>
+      </div>
+      <p style="font-size:12px;color:var(--mmg-text-muted);margin-top:-4px">Weeks before the effective date stay at the old salary — past pay and 1099 totals won't change.</p>
+    </div>
     <div class="sect-ttl">Tax Info (for 1099)</div>
     <div class="fg"><label class="fl">Street Address</label><input class="fi" type="text" id="ee-street"></div>
     <div class="fi-row"><div class="fg"><label class="fl">City</label><input class="fi" type="text" id="ee-city"></div>
@@ -824,6 +846,32 @@ function saveEntries(v) { saveEntriesL(v); pushEntries(v); }
 function saveSettingsData(v) { saveSettingsL(v); pushSettings(v); }
 function extraPayForYear(eid,yr){return getExtraPay().filter(e=>e.employeeId===eid&&new Date(e.date).getFullYear()===yr).reduce((s,e)=>s+e.amount,0);}
 
+// ── Rate history (supports mid-year raises) ──────────────────────
+// emp.rateHistory = [{effective: ms, rate: n}] sorted ascending.
+// emp.hourlyRate is kept in sync with the latest (current) rate.
+function getRateHistory(emp){
+  if(emp.rateHistory && emp.rateHistory.length)
+    return [...emp.rateHistory].sort((a,b)=>a.effective-b.effective);
+  return [{effective:0, rate:emp.hourlyRate||0}];
+}
+function rateForDate(emp, ms){
+  const h=getRateHistory(emp); let r=h[0].rate;
+  for(const e of h){ if(e.effective<=ms) r=e.rate; else break; }
+  return r;
+}
+function grossForEntries(emp, entries){
+  return entries.reduce((s,e)=> e.clockOut
+    ? s + ((e.clockOut-e.clockIn)/3600000)*rateForDate(emp,e.clockIn) : s, 0);
+}
+function currentRate(emp){ const h=getRateHistory(emp); return h[h.length-1].rate; }
+
+function rateHistoryHTML(emp){
+  const hist=getRateHistory(emp);
+  if(!(hist.length>1||hist[0].effective>0))return '';
+  return '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mmg-text-muted);margin:4px 0 6px">Rate History</div>'+
+    hist.map(h=>`<div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid var(--mmg-border)"><span>${h.effective===0?'Start':fmtDate(h.effective)}</span><strong>$${h.rate.toFixed(2)}/hr</strong></div>`).join('');
+}
+
 // ── Seed (admin only — no demo employees) ────────────────────────
 function initData() {
   if (getEmps().find(e => e.role === 'admin')) return;
@@ -938,16 +986,29 @@ function startClock() {
 }
 
 // ── Extra pay ────────────────────────────────────────────────────────
-function openAddEP(eid) {
+function openAddEP(eid, dateStr) {
   const emp=getEmps().find(e=>e.id===eid);
   document.getElementById('ep-eid').value=eid;
   document.getElementById('ep-emp-label').textContent=emp?.name||'';
   document.getElementById('ep-type').value='Bonus';
   document.getElementById('ep-note').value='';
   document.getElementById('ep-amount').value='';
-  document.getElementById('ep-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('ep-date').value=dateStr||new Date().toISOString().slice(0,10);
   document.getElementById('ep-err').style.display='none';
   openModal('o-add-ep');
+}
+// Extra-pay list + add button for a given period, used inside Time Sheets.
+function extraPaySectionHTML(eid, startMs, endMs, checkDateStr){
+  const eps=getExtraPay().filter(x=>x.employeeId===eid&&x.date>=startMs&&x.date<=endMs).sort((a,b)=>a.date-b.date);
+  return `<div class="card" style="margin-top:16px">
+    <div class="sec-hd" style="margin-bottom:12px">
+      <h3 style="font-family:var(--mmg-font-display);font-size:16px;color:var(--mmg-navy)">Extra Pay This Check</h3>
+      <button class="btn btn-outline btn-sm" onclick="openAddEP('${eid}','${checkDateStr}')">+ Add Extra Pay</button></div>
+    ${eps.length?`<table class="tbl"><thead><tr><th>Date</th><th>Type</th><th>Note</th><th>Amount</th><th></th></tr></thead><tbody>
+    ${eps.map(x=>`<tr><td>${fmtDate(x.date)}</td><td>${x.type}</td><td style="color:var(--mmg-text-muted)">${x.note||'—'}</td><td><strong>${fmtMoney(x.amount)}</strong></td>
+    <td style="text-align:right"><button class="btn btn-danger btn-sm" onclick="deleteEP('${x.id}')">Delete</button></td></tr>`).join('')}
+    </tbody></table>`:'<div class="empty" style="padding:14px">No extra pay for this check. Bonuses, commissions, and reimbursements added here roll into the 1099.</div>'}
+  </div>`;
 }
 function saveEPEntry() {
   const eid=document.getElementById('ep-eid').value;
@@ -967,13 +1028,17 @@ function saveEPEntry() {
   const tab=document.querySelector('.tab.on')?.id?.replace('tab-','');
   if(tab==='payroll')renderPayroll();
   if(tab==='1099')render1099Tab();
+  if(tab==='timesheets')renderTS();
   if(tab==='employees')renderEmpList();
 }
 function deleteEP(id) {
   if(!confirm('Remove this extra pay entry?'))return;
   const all=getExtraPay().filter(e=>e.id!==id);
   saveExtraPayData(all);
-  renderPayroll();
+  const tab=document.querySelector('.tab.on')?.id?.replace('tab-','');
+  if(tab==='timesheets')renderTS();
+  else if(tab==='1099')render1099Tab();
+  else renderPayroll();
 }
 
 // ── Salary helpers ──────────────────────────────────────────────
@@ -981,52 +1046,124 @@ function toggleEmpType(pfx) {
   const t=document.getElementById(pfx+'-type').value;
   document.getElementById(pfx+'-rate-row').style.display=t==='salary'?'none':'';
   document.getElementById(pfx+'-salary-row').style.display=t==='salary'?'':'none';
+  const mgr=document.getElementById(pfx+'-rate-mgr');
+  if(mgr)mgr.style.display=t==='salary'?'none':'';
+  const smgr=document.getElementById(pfx+'-salary-mgr');
+  if(smgr)smgr.style.display=t==='salary'?'':'none';
 }
-function salaryCompForYear(emp,yr) {
-  if(!emp.annualSalary)return 0;
+function salaryWeekly(emp){ return (emp.annualSalary||0)/52; }
+// Salary history (supports mid-year salary changes) — mirrors rate history.
+function getSalaryHistory(emp){
+  if(emp.salaryHistory && emp.salaryHistory.length)
+    return [...emp.salaryHistory].sort((a,b)=>a.effective-b.effective);
+  return [{effective:0, annual:emp.annualSalary||0}];
+}
+function salaryForDate(emp, ms){
+  const h=getSalaryHistory(emp); let a=h[0].annual;
+  for(const e of h){ if(e.effective<=ms) a=e.annual; else break; }
+  return a;
+}
+function salaryWeeklyForDate(emp, ms){ return salaryForDate(emp, ms)/52; }
+function currentAnnual(emp){ const h=getSalaryHistory(emp); return h[h.length-1].annual; }
+function salaryHistoryHTML(emp){
+  const hist=getSalaryHistory(emp);
+  if(!(hist.length>1||hist[0].effective>0))return '';
+  return '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mmg-text-muted);margin:4px 0 6px">Salary History</div>'+
+    hist.map(h=>`<div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid var(--mmg-border)"><span>${h.effective===0?'Start':fmtDate(h.effective)}</span><strong>${fmtMoney(h.annual)}/yr</strong></div>`).join('');
+}
+function salaryWeekKey(ms){ const d=new Date(ms),p=x=>String(x).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
+// Normalize an override value (legacy number OR {amount,note}) to {amount,note} or null.
+function salaryOv(emp,key){ const v=(emp.salaryOverrides||{})[key]; if(v==null)return null; return typeof v==='object'?{amount:v.amount,note:v.note||''}:{amount:v,note:''}; }
+// All accrued weeks for an employee in a given year, applying start date + per-week overrides.
+function salaryWeeksForYear(emp,yr){
+  if(!emp.annualSalary)return [];
   const now=new Date(),cur=now.getFullYear();
-  if(yr<cur)return emp.annualSalary;
-  if(yr>cur)return 0;
-  const jan1=new Date(yr,0,1);
-  return Math.min(Math.floor((now-jan1)/(7*24*3600000)),52)*(emp.annualSalary/52);
+  if(yr>cur)return [];
+  const jan1=new Date(yr,0,1).getTime(),wk=7*24*3600000;
+  const startMs=emp.salaryStart?Math.max(emp.salaryStart,jan1):jan1;
+  const firstIdx=Math.max(0,Math.floor((startMs-jan1)/wk));
+  const lastIdx=yr<cur?51:Math.min(Math.floor((now.getTime()-jan1)/wk),51);
+  const out=[];
+  for(let w=firstIdx;w<=lastIdx;w++){
+    const ws=jan1+w*wk,key=salaryWeekKey(ws),o=salaryOv(emp,key);
+    const weekly=salaryWeeklyForDate(emp, ws);
+    out.push({index:w,startMs:ws,endMs:ws+6*24*3600000,key,amount:o?o.amount:weekly,note:o?o.note:'',overridden:!!o});
+  }
+  return out;
+}
+function salaryCompForYear(emp,yr){
+  if(!emp.annualSalary)return 0;
+  return salaryWeeksForYear(emp,yr).reduce((s,w)=>s+w.amount,0);
 }
 function renderSalaryEmpDash() {
   stopClocks();
-  const weekly=(CU.annualSalary||0)/52;
-  const now=new Date(),yr=now.getFullYear(),jan1=new Date(yr,0,1);
-  const we=Math.min(Math.floor((now-jan1)/(7*24*3600000)),52),ytd=we*weekly;
+  const weekly=salaryWeeklyForDate(CU, Date.now());
+  const now=new Date(),yr=now.getFullYear();
+  const weeks=salaryWeeksForYear(CU,yr),ytd=weeks.reduce((s,w)=>s+w.amount,0);
   const hero=document.querySelector('.clock-hero');
   if(hero)hero.innerHTML=`
     <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mmg-blue-pale);margin-bottom:6px">Annual Salary</div>
-    <div style="font-family:var(--mmg-font-display);font-size:52px;font-weight:700;color:#fff;letter-spacing:-2px;line-height:1">${fmtMoney(CU.annualSalary||0)}</div>
+    <div style="font-family:var(--mmg-font-display);font-size:52px;font-weight:700;color:#fff;letter-spacing:-2px;line-height:1">${fmtMoney(currentAnnual(CU))}</div>
     <div style="font-size:13px;color:var(--mmg-blue-pale);margin:10px 0 6px">${fmtMoney(weekly)}/week &middot; auto-processed weekly</div>
     <div style="font-size:15px;color:var(--mmg-blue-light);font-weight:300">YTD ${yr}: ${fmtMoney(ytd)}</div>`;
   const th=document.querySelector('#s-emp .tbl thead tr');
   if(th)th.innerHTML='<th>Pay Period</th><th>Type</th><th>Status</th><th>Pay</th>';
   document.getElementById('emp-total').textContent='YTD: '+fmtMoney(ytd);
-  const rows=[];
-  for(let w=Math.max(0,we-11);w<=we;w++){
-    const ws=new Date(jan1.getTime()+w*7*24*3600000),we2=new Date(ws.getTime()+6*24*3600000);
-    rows.unshift(`<tr><td>${ws.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${we2.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</td>
-    <td>Salary</td><td>${w===we?'<span class="badge bdg-y">In Progress</span>':'<span class="badge bdg-g">Processed</span>'}</td>
-    <td>${fmtMoney(weekly)}</td></tr>`);
-  }
-  document.getElementById('emp-tbody').innerHTML=rows.join('')||'<tr><td colspan="4" class="empty">No weeks yet.</td></tr>';
+  const last=weeks.slice(-12).reverse();
+  document.getElementById('emp-tbody').innerHTML=last.map(w=>{
+    const inProg=w.index===weeks[weeks.length-1].index;
+    return `<tr><td>${new Date(w.startMs).toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${new Date(w.endMs).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</td>
+    <td>Salary${w.overridden?' <span class="badge bdg-y" style="font-size:9px">Adjusted</span>':''}</td>
+    <td>${inProg?'<span class="badge bdg-y">In Progress</span>':'<span class="badge bdg-g">Processed</span>'}</td>
+    <td>${fmtMoney(w.amount)}</td></tr>`;
+  }).join('')||'<tr><td colspan="4" class="empty">No weeks yet.</td></tr>';
 }
 function renderSalaryTS(emp,week) {
-  const weekly=(emp.annualSalary||0)/52;
-  const start=new Date(week+'T00:00:00'),end=new Date(start);end.setDate(start.getDate()+6);
-  const past=end<new Date();
+  const wk=7*24*3600000,jan1=new Date(new Date(week+'T00:00:00').getFullYear(),0,1).getTime();
+  const sel=new Date(week+'T00:00:00').getTime();
+  const idx=Math.max(0,Math.floor((sel-jan1)/wk)),ws=jan1+idx*wk,we=ws+6*24*3600000;
+  const weekly=salaryWeeklyForDate(emp, ws);
+  const key=salaryWeekKey(ws),o=salaryOv(emp,key),hasOv=!!o;
+  const amount=hasOv?o.amount:weekly,note=hasOv?o.note:'';
+  const startedAfter=emp.salaryStart&&emp.salaryStart>we;
   document.getElementById('ts-result').innerHTML=`<div class="card">
     <div class="sec-hd"><div>
       <div style="font-family:var(--mmg-font-display);font-size:17px;color:var(--mmg-navy)">${emp.name} — Salary</div>
-      <div style="font-size:12px;color:var(--mmg-text-muted)">${start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${end.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
-    </div><span class="badge bdg-b">${fmtMoney(weekly)}/wk</span></div>
-    <table class="tbl"><thead><tr><th>Type</th><th>Annual Salary</th><th>Weekly Rate</th><th>Status</th></tr></thead>
+      <div style="font-size:12px;color:var(--mmg-text-muted)">Check ${new Date(week+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · covers ${new Date(ws).toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${new Date(we).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
+    </div><span class="badge bdg-b">${fmtMoney(weekly)}/wk default</span></div>
+    ${startedAfter?`<div class="empty" style="padding:16px">Salary starts ${fmtDate(emp.salaryStart)} — no pay accrued for this week.</div>`:`
+    <table class="tbl"><thead><tr><th>Type</th><th>Annual Salary</th><th>Default Weekly</th><th>This Week's Pay</th><th>Status</th></tr></thead>
     <tbody><tr><td>Salary</td><td>${fmtMoney(emp.annualSalary||0)}</td><td>${fmtMoney(weekly)}</td>
-    <td><span class="badge ${past?'bdg-g':'bdg-y'}">${past?'Processed':'In Progress'}</span></td></tr></tbody></table>
-    <p style="font-size:12px;color:var(--mmg-text-muted);margin-top:14px;padding-top:14px;border-top:1px solid var(--mmg-border)">Salary is auto-processed weekly. No manual entries needed.</p>
-  </div>`;
+    <td><strong>${fmtMoney(amount)}</strong>${hasOv?' <span class="badge bdg-y" style="font-size:9px">Adjusted</span>':''}</td>
+    <td><span class="badge ${we<Date.now()?'bdg-g':'bdg-y'}">${we<Date.now()?'Processed':'In Progress'}</span></td></tr></tbody></table>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--mmg-border)">
+      <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mmg-text-muted);margin-bottom:10px">Adjust This Check's Pay</div>
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+        <div class="fg" style="margin:0;width:160px"><label class="fl">Pay for this check ($)</label>
+          <input class="fi" type="number" id="sal-wk-amount" value="${amount.toFixed(2)}" step="0.01" min="0"></div>
+        <div class="fg" style="margin:0;flex:1;min-width:180px"><label class="fl">Note (optional)</label>
+          <input class="fi" type="text" id="sal-wk-note" value="${note.replace(/"/g,'&quot;')}" placeholder="e.g. partial week, PTO"></div>
+        <button class="btn btn-primary btn-sm" onclick="setSalaryWeek('${emp.id}','${key}')">Save Check</button>
+        ${hasOv?`<button class="btn btn-outline btn-sm" onclick="clearSalaryWeek('${emp.id}','${key}')">Reset to Default</button>`:''}
+      </div>
+      <p style="font-size:12px;color:var(--mmg-text-muted);margin-top:8px">Changing this check only affects this pay period. It rolls into the year-to-date total and the 1099.</p>
+    </div>`}
+  </div>` + extraPaySectionHTML(emp.id, ws, we+ (24*3600000-1), week);
+}
+function setSalaryWeek(eid,key){
+  const amount=parseFloat(document.getElementById('sal-wk-amount').value);
+  if(isNaN(amount)||amount<0){alert('Enter a valid amount.');return;}
+  const note=document.getElementById('sal-wk-note')?.value||'';
+  const emps=getEmps(),idx=emps.findIndex(e=>e.id===eid);
+  const ov={...(emps[idx].salaryOverrides||{})};ov[key]={amount,note};
+  emps[idx]={...emps[idx],salaryOverrides:ov};
+  saveEmps(emps);renderTS();
+}
+function clearSalaryWeek(eid,key){
+  const emps=getEmps(),idx=emps.findIndex(e=>e.id===eid);
+  const ov={...(emps[idx].salaryOverrides||{})};delete ov[key];
+  emps[idx]={...emps[idx],salaryOverrides:ov};
+  saveEmps(emps);renderTS();
 }
 
 // ── Import historical data ────────────────────────────────────────
@@ -1214,12 +1351,11 @@ function renderEmpList() {
     return`<div class="emp-row" style="${!emp.active?'opacity:.5':''}">
       <div class="avatar">${initials(emp.name)}</div>
       <div class="emp-inf"><div class="emp-n">${emp.name}</div>
-      <div class="emp-m">@${emp.username} · ${emp.employmentType==='salary'?fmtMoney(emp.annualSalary||0)+'/yr (salary)':'$'+(emp.hourlyRate||0).toFixed(2)+'/hr'}</div></div>
+      <div class="emp-m">@${emp.username} · ${emp.employmentType==='salary'?fmtMoney(currentAnnual(emp))+'/yr (salary)'+(getSalaryHistory(emp).length>1?' <span class="badge bdg-b" style="font-size:9px;vertical-align:middle">'+getSalaryHistory(emp).length+' salaries</span>':''):'$'+currentRate(emp).toFixed(2)+'/hr'+(getRateHistory(emp).length>1?' <span class="badge bdg-b" style="font-size:9px;vertical-align:middle">'+getRateHistory(emp).length+' rates</span>':'')}</div></div>
       ${badge}
       <div class="emp-acts">${emp.active?`
         <button class="btn btn-outline btn-sm" onclick="viewTS('${emp.id}')">Time Sheet</button>
         <button class="btn btn-outline btn-sm" onclick="openEditEmp('${emp.id}')">Edit</button>
-        <button class="btn btn-outline btn-sm" onclick="openAddEP('${emp.id}')">+ Extra Pay</button>
         <button class="btn btn-danger btn-sm" onclick="openDelete('${emp.id}')">Remove</button>`:''}
       </div></div>`;
   }).join('');
@@ -1232,15 +1368,18 @@ function renderTS() {
   const week=document.getElementById('ts-week').value;
   const res=document.getElementById('ts-result');
   if(!eid){res.innerHTML='<div class="empty">Select an employee.</div>';return;}
-  const start=new Date(week+'T00:00:00');
-  const end=new Date(start); end.setDate(start.getDate()+6); end.setHours(23,59,59,999);
+  if(!week){res.innerHTML='<div class="empty">Select a check date.</div>';return;}
   const emp=getEmps().find(e=>e.id===eid);
   if(emp?.employmentType==='salary'){renderSalaryTS(emp,week);return;}
+  // Check date = last day of the pay period; period is the 7 days ending on it.
+  const check=new Date(week+'T00:00:00');
+  const end=new Date(check); end.setHours(23,59,59,999);
+  const start=new Date(check); start.setDate(check.getDate()-6); start.setHours(0,0,0,0);
   const rows=getEntries().filter(e=>e.employeeId===eid&&e.clockIn>=start&&e.clockIn<=end).sort((a,b)=>b.clockIn-a.clockIn);
   const total=rows.filter(r=>r.clockOut).reduce((s,r)=>s+(r.clockOut-r.clockIn),0);
   res.innerHTML=`<div class="card">
     <div class="sec-hd"><div><div style="font-family:var(--mmg-font-display);font-size:17px;color:var(--mmg-navy)">${emp.name}</div>
-    <div style="font-size:12px;color:var(--mmg-text-muted)">${start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${end.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div></div>
+    <div style="font-size:12px;color:var(--mmg-text-muted)">Check ${check.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · covers ${start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${end.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div></div>
     <div style="display:flex;gap:8px;align-items:center"><span class="badge bdg-b">${fmtHrs(total)}</span>
     <button class="btn btn-primary btn-sm" onclick="openAddEntry('${eid}','${week}')">+ Add Entry</button></div></div>
     ${rows.length?`<table class="tbl"><thead><tr><th>Date</th><th>In</th><th>Out</th><th>Duration</th><th></th></tr></thead><tbody>
@@ -1250,7 +1389,8 @@ function renderTS() {
     <td style="text-align:right"><span style="display:inline-flex;gap:6px">
     <button class="btn btn-outline btn-sm" onclick="openEditEntry('${r.id}')">Edit</button>
     <button class="btn btn-danger btn-sm" onclick="deleteEntry('${r.id}')">Delete</button></span></td></tr>`).join('')}
-    </tbody></table>`:'<div class="empty">No entries this week.</div>'}</div>`;
+    </tbody></table>`:'<div class="empty">No entries for this check period.</div>'}</div>`
+    + extraPaySectionHTML(eid, start.getTime(), end.getTime(), week);
 }
 
 function openEditEntry(eid) {
@@ -1323,16 +1463,18 @@ function renderPayroll() {
   }
   const rows=getEntries().filter(x=>x.employeeId===eid&&x.clockIn>=start&&x.clockIn<=end&&x.clockOut).sort((a,b)=>a.clockIn-b.clockIn);
   const totalMs=rows.reduce((sum,r)=>sum+(r.clockOut-r.clockIn),0);
-  const hrs=totalMs/3600000, gross=hrs*emp.hourlyRate;
+  const hrs=totalMs/3600000, gross=grossForEntries(emp,rows);
+  const ratesInPeriod=[...new Set(rows.map(r=>rateForDate(emp,r.clockIn)))];
+  const rateLabel=ratesInPeriod.length>1?'Multiple':'$'+(ratesInPeriod[0]||currentRate(emp)).toFixed(2);
   res.innerHTML=`<div class="pay-hero"><div class="pay-lbl">Estimated Gross Pay</div>
     <div class="pay-amt">${fmtMoney(gross)}</div>
     <div class="pay-meta">${emp.name} · ${new Date(s+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${new Date(e+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div></div>
   <div class="card"><div class="chip-row">
     <div class="chip"><div class="chip-l">Total Hours</div><div class="chip-v">${hrs.toFixed(2)}</div></div>
-    <div class="chip"><div class="chip-l">Hourly Rate</div><div class="chip-v">$${emp.hourlyRate.toFixed(2)}</div></div>
+    <div class="chip"><div class="chip-l">Hourly Rate</div><div class="chip-v">${rateLabel}</div></div>
     <div class="chip"><div class="chip-l">Entries</div><div class="chip-v">${rows.length}</div></div></div>
-  ${rows.length?`<table class="tbl"><thead><tr><th>Date</th><th>In</th><th>Out</th><th>Hours</th><th>Pay</th></tr></thead><tbody>
-  ${rows.map(r=>{const h=(r.clockOut-r.clockIn)/3600000;return`<tr><td>${fmtDate(r.clockIn)}</td><td>${fmtTime(r.clockIn)}</td><td>${fmtTime(r.clockOut)}</td><td>${h.toFixed(2)}</td><td>${fmtMoney(h*emp.hourlyRate)}</td></tr>`;}).join('')}
+  ${rows.length?`<table class="tbl"><thead><tr><th>Date</th><th>In</th><th>Out</th><th>Hours</th><th>Rate</th><th>Pay</th></tr></thead><tbody>
+  ${rows.map(r=>{const h=(r.clockOut-r.clockIn)/3600000,rt=rateForDate(emp,r.clockIn);return`<tr><td>${fmtDate(r.clockIn)}</td><td>${fmtTime(r.clockIn)}</td><td>${fmtTime(r.clockOut)}</td><td>${h.toFixed(2)}</td><td>$${rt.toFixed(2)}</td><td>${fmtMoney(h*rt)}</td></tr>`;}).join('')}
   </tbody></table>`:'<div class="empty">No completed entries for this period.</div>'}</div>`;
   // Extra pay in period
   const epInPeriod=getExtraPay().filter(x=>x.employeeId===eid&&x.date>=start&&x.date<=end);
@@ -1357,8 +1499,9 @@ function render1099Tab() {
     if(emp.employmentType==='salary'){
       pay=salaryCompForYear(emp,yr);hrs='Salary';
     }else{
-      const ms=getEntries().filter(e=>e.employeeId===emp.id&&e.clockOut&&new Date(e.clockIn).getFullYear()===yr).reduce((s,e)=>s+(e.clockOut-e.clockIn),0);
-      pay=(ms/3600000)*(emp.hourlyRate||0);hrs=emp.hourlyRate&&pay?(pay/emp.hourlyRate).toFixed(2):'—';
+      const yrEntries=getEntries().filter(e=>e.employeeId===emp.id&&e.clockOut&&new Date(e.clockIn).getFullYear()===yr);
+      const ms=yrEntries.reduce((s,e)=>s+(e.clockOut-e.clockIn),0);
+      pay=grossForEntries(emp,yrEntries);hrs=(ms/3600000).toFixed(2);
     }
     const ep=extraPayForYear(emp.id,yr);
     return{emp,pay:pay+ep,basePay:pay,extraPay:ep,hrs,hasInfo:!!(emp.taxId||emp.street)};
@@ -1371,9 +1514,8 @@ function render1099Tab() {
     <td>${hrs}</td>
     <td><strong>${fmtMoney(pay)}</strong>${extraPay>0?`<br><span style="font-size:11px;color:var(--mmg-text-muted)">${fmtMoney(basePay)} base + ${fmtMoney(extraPay)} extra</span>`:''}</td>
     <td>${hasInfo?'<span class="badge bdg-g">On file</span>':'<span class="badge bdg-r">Missing</span>'}</td>
-    <td style="text-align:right;white-space:nowrap"><span style="display:inline-flex;gap:6px">
-    <button class="btn btn-outline btn-sm" onclick="openAddEP('${emp.id}')">+ Extra Pay</button>
-    <button class="btn btn-primary btn-sm" onclick="print1099('${emp.id}',${yr})">Print 1099</button></span></td></tr>`).join('')}
+    <td style="text-align:right;white-space:nowrap">
+    <button class="btn btn-primary btn-sm" onclick="print1099('${emp.id}',${yr})">Print 1099</button></td></tr>`).join('')}
   <tr style="background:var(--mmg-off-white)"><td colspan="3" style="font-weight:700">Total NEC</td><td colspan="3" style="font-weight:700">${fmtMoney(total)}</td></tr>
   </tbody></table></div>`;
 }
@@ -1384,8 +1526,8 @@ function print1099(eid, yr) {
   if(emp.employmentType==='salary'){
     pay=salaryCompForYear(emp,yr);
   }else{
-    const ms=getEntries().filter(e=>e.employeeId===eid&&e.clockOut&&new Date(e.clockIn).getFullYear()===yr).reduce((s,e)=>s+(e.clockOut-e.clockIn),0);
-    pay=((ms/3600000)*(emp.hourlyRate||0));
+    const yrEntries=getEntries().filter(e=>e.employeeId===eid&&e.clockOut&&new Date(e.clockIn).getFullYear()===yr);
+    pay=grossForEntries(emp,yrEntries);
   }
   const epTotal=extraPayForYear(eid,yr);
   pay+=epTotal;
@@ -1428,7 +1570,7 @@ function openModal(id) {
 function closeModal(id) { document.getElementById(id).classList.remove('on'); }
 
 function openAddEmp() {
-  ['ae-name','ae-user','ae-pass','ae-rate','ae-salary','ae-street','ae-city','ae-state','ae-zip','ae-taxid'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  ['ae-name','ae-user','ae-pass','ae-rate','ae-salary','ae-salary-start','ae-street','ae-city','ae-state','ae-zip','ae-taxid'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
   document.getElementById('ae-type').value='hourly';
   toggleEmpType('ae');
   document.getElementById('add-err').style.display='none';
@@ -1446,6 +1588,7 @@ function saveNewEmp() {
   if(emps.some(e=>e.username===user)){err.textContent='Username already taken.';err.style.display='block';return;}
   emps.push({id:'e'+Date.now(),name,username:user,password:pass,
     employmentType:type,hourlyRate:isNaN(rate)?0:rate,annualSalary:isNaN(salary)?0:salary,
+    salaryStart:document.getElementById('ae-salary-start').value?new Date(document.getElementById('ae-salary-start').value+'T00:00:00').getTime():null,
     role:'employee',active:true,mustChangePassword:true,
     street:document.getElementById('ae-street').value,city:document.getElementById('ae-city').value,
     state:document.getElementById('ae-state').value,zip:document.getElementById('ae-zip').value,
@@ -1459,8 +1602,15 @@ function openEditEmp(eid) {
   document.getElementById('ee-user').value   =emp.username;
   document.getElementById('ee-pass').value   ='';
   document.getElementById('ee-type').value   =emp.employmentType||'hourly';
-  document.getElementById('ee-rate').value   =emp.hourlyRate||'';
-  document.getElementById('ee-salary').value =emp.annualSalary||'';
+  document.getElementById('ee-rate').value   =emp.employmentType==='salary'?(emp.hourlyRate||''):currentRate(emp)||'';
+  document.getElementById('ee-salary').value =emp.employmentType==='salary'?(currentAnnual(emp)||''):(emp.annualSalary||'');
+  document.getElementById('ee-salary-start').value =emp.salaryStart?new Date(emp.salaryStart).toISOString().slice(0,10):'';
+  document.getElementById('ee-new-rate').value='';
+  document.getElementById('ee-new-rate-date').value='';
+  document.getElementById('ee-rate-history').innerHTML=rateHistoryHTML(emp);
+  document.getElementById('ee-new-salary').value='';
+  document.getElementById('ee-new-salary-date').value='';
+  document.getElementById('ee-salary-history').innerHTML=salaryHistoryHTML(emp);
   document.getElementById('ee-street').value =emp.street||'';
   document.getElementById('ee-city').value   =emp.city||'';
   document.getElementById('ee-state').value  =emp.state||'';
@@ -1480,8 +1630,41 @@ function saveEditEmp() {
   if(type==='hourly'&&isNaN(rate)){err.textContent='Hourly rate is required.';err.style.display='block';return;}
   if(type==='salary'&&isNaN(salary)){err.textContent='Annual salary is required.';err.style.display='block';return;}
   const emps=getEmps(),idx=emps.findIndex(e=>e.id===eid);
+  // Rate history: correct current rate + optionally log a new rate change
+  let rateHistory=emps[idx].rateHistory;
+  if(type==='hourly'){
+    let hist=getRateHistory(emps[idx]);
+    if(!isNaN(rate)) hist[hist.length-1].rate=rate; // correct current rate in place
+    const nr=parseFloat(document.getElementById('ee-new-rate').value);
+    const nd=document.getElementById('ee-new-rate-date').value;
+    if(!isNaN(nr)&&nd){
+      const eff=new Date(nd+'T00:00:00').getTime();
+      hist=hist.filter(h=>h.effective!==eff);
+      hist.push({effective:eff,rate:nr});
+      hist.sort((a,b)=>a.effective-b.effective);
+    }
+    rateHistory=hist;
+  }
+  // Salary history: correct current salary + optionally log a new salary change
+  let salaryHistory=emps[idx].salaryHistory;
+  if(type==='salary'){
+    let sh=getSalaryHistory(emps[idx]);
+    if(!isNaN(salary)) sh[sh.length-1].annual=salary; // correct current salary in place
+    const ns=parseFloat(document.getElementById('ee-new-salary').value);
+    const nsd=document.getElementById('ee-new-salary-date').value;
+    if(!isNaN(ns)&&nsd){
+      const eff=new Date(nsd+'T00:00:00').getTime();
+      sh=sh.filter(h=>h.effective!==eff);
+      sh.push({effective:eff,annual:ns});
+      sh.sort((a,b)=>a.effective-b.effective);
+    }
+    salaryHistory=sh;
+  }
   emps[idx]={...emps[idx],name,username:user,employmentType:type,
-    hourlyRate:isNaN(rate)?emps[idx].hourlyRate:rate,annualSalary:isNaN(salary)?emps[idx].annualSalary:salary,
+    rateHistory,salaryHistory,
+    hourlyRate:type==='hourly'?rateHistory[rateHistory.length-1].rate:(isNaN(rate)?emps[idx].hourlyRate:rate),
+    annualSalary:type==='salary'?salaryHistory[salaryHistory.length-1].annual:(isNaN(salary)?emps[idx].annualSalary:salary),
+    salaryStart:document.getElementById('ee-salary-start').value?new Date(document.getElementById('ee-salary-start').value+'T00:00:00').getTime():null,
     ...(pass?{password:pass}:{}),
     street:document.getElementById('ee-street').value,city:document.getElementById('ee-city').value,
     state:document.getElementById('ee-state').value,zip:document.getElementById('ee-zip').value,
