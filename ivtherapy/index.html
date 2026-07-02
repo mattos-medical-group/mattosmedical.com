@@ -1050,5 +1050,57 @@ document.querySelectorAll('.lang-btn').forEach((btn) => {
   });
 })();
 </script>
+<!-- Floating mobile nav — tablet & under -->
+<script>
+(function(){
+  if(document.getElementById('mmgFloatHbg'))return;
+  var css=document.createElement('style');
+  css.textContent=[
+    '.mmg-float-hbg{display:none;position:fixed;top:16px;right:16px;z-index:1000;width:52px;height:52px;border-radius:14px;background:var(--mmg-navy,#0b1e3d);border:none;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 6px 20px rgba(11,30,61,0.28);}',
+    '.mmg-float-hbg span{display:block;height:2px;width:22px;background:#fff;border-radius:2px;transition:transform .25s,opacity .25s;}',
+    '.mmg-float-hbg.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg);}',
+    '.mmg-float-hbg.is-open span:nth-child(2){opacity:0;}',
+    '.mmg-float-hbg.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}',
+    '.mmg-mob-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(11,30,61,0.5);}',
+    '.mmg-mob-overlay.is-open{display:block;}',
+    '.mmg-mob-panel{position:absolute;top:0;right:0;width:min(320px,86vw);height:100%;background:#fff;box-shadow:-6px 0 40px rgba(0,0,0,0.22);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,.84,.44,1);}',
+    '.mmg-mob-overlay.is-open .mmg-mob-panel{transform:translateX(0);}',
+    '.mmg-mob-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--mmg-border,#ddd8cc);}',
+    '.mmg-mob-head b{font-size:14px;font-weight:700;color:var(--mmg-navy,#0b1e3d);letter-spacing:.3px;}',
+    '.mmg-mob-close{background:none;border:none;width:36px;height:36px;font-size:24px;line-height:1;cursor:pointer;color:var(--mmg-navy,#0b1e3d);}',
+    '.mmg-mob-links{flex:1;overflow-y:auto;padding:8px 0;}',
+    '.mmg-mob-links a{display:block;font-size:16px;font-weight:600;color:#2d3d50;text-decoration:none;padding:15px 24px;border-bottom:1px solid #f0ede6;}',
+    '.mmg-mob-links a:hover{background:#f6f4ef;color:var(--mmg-navy,#0b1e3d);}',
+    '.mmg-mob-cta{margin:16px 22px 28px;display:block;background:var(--mmg-grad-cta,linear-gradient(135deg,#2678c0,#4a94d6));color:#fff;padding:14px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;text-align:center;box-shadow:0 6px 18px rgba(38,120,192,0.32);}',
+    '@media(max-width:1024px){.mmg-float-hbg{display:flex;}}'
+  ].join('');
+  document.head.appendChild(css);
+  var srcLinks=document.querySelector('.nav-links');
+  var srcCta=document.querySelector('.nav-cta');
+  var btn=document.createElement('button');
+  btn.id='mmgFloatHbg';btn.className='mmg-float-hbg';btn.setAttribute('aria-label','Menú');btn.setAttribute('aria-expanded','false');
+  btn.innerHTML='<span></span><span></span><span></span>';
+  var ov=document.createElement('div');
+  ov.className='mmg-mob-overlay';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');
+  var panel=document.createElement('div');panel.className='mmg-mob-panel';
+  var head=document.createElement('div');head.className='mmg-mob-head';
+  head.innerHTML='<b>Mattos Medical Group</b>';
+  var closeBtn=document.createElement('button');closeBtn.className='mmg-mob-close';closeBtn.setAttribute('aria-label','Cerrar');closeBtn.innerHTML='&times;';
+  head.appendChild(closeBtn);
+  var linksWrap=document.createElement('nav');linksWrap.className='mmg-mob-links';
+  if(srcLinks)linksWrap.innerHTML=srcLinks.innerHTML;
+  panel.appendChild(head);panel.appendChild(linksWrap);
+  if(srcCta){var cta=srcCta.cloneNode(true);cta.className='mmg-mob-cta';cta.style.marginLeft='';panel.appendChild(cta);}
+  ov.appendChild(panel);
+  document.body.appendChild(btn);document.body.appendChild(ov);
+  function open(){ov.classList.add('is-open');btn.classList.add('is-open');btn.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}
+  function close(){ov.classList.remove('is-open');btn.classList.remove('is-open');btn.setAttribute('aria-expanded','false');document.body.style.overflow='';}
+  btn.addEventListener('click',function(){ov.classList.contains('is-open')?close():open();});
+  closeBtn.addEventListener('click',close);
+  ov.addEventListener('click',function(e){if(e.target===ov)close();});
+  linksWrap.addEventListener('click',function(e){if(e.target.closest('a'))close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
 </body>
 </html>
