@@ -818,7 +818,7 @@ document.querySelectorAll('.lang-btn').forEach((btn) => {
     '.mmg-mob-links a{display:block;font-size:16px;font-weight:600;color:#2d3d50;text-decoration:none;padding:15px 24px;border-bottom:1px solid #f0ede6;}',
     '.mmg-mob-links a:hover{background:#f6f4ef;color:var(--mmg-navy,#0b1e3d);}',
     '.mmg-mob-cta{margin:16px 22px 28px;display:block;background:var(--mmg-grad-cta,linear-gradient(135deg,#2678c0,#4a94d6));color:#fff;padding:14px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;text-align:center;box-shadow:0 6px 18px rgba(38,120,192,0.32);}',
-    '@media(max-width:1024px){.mmg-float-hbg{display:flex;}}'
+    '@media(max-width:1024px){.mmg-float-hbg{display:flex;}.nav-links{display:none!important;}.nav-cta{display:none!important;}}'
   ].join('');
   document.head.appendChild(css);
   var srcLinks=document.querySelector('.nav-links');
