@@ -358,7 +358,7 @@ body.en h1[data-lang="en"],body.en div[data-lang="en"],body.en p[data-lang="en"]
 .nav-mob-foot{padding:16px 20px 28px;display:flex;flex-direction:column;gap:10px;border-top:1px solid #ddd8cc;}
 .nav-mob-book{display:block;background:linear-gradient(135deg,#2678c0,#4a94d6);color:#fff;padding:14px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;text-align:center;box-shadow:0 6px 18px rgba(38,120,192,0.32);}
 .nav-mob-phone{display:block;color:#0b1e3d;font-size:14px;font-weight:600;text-decoration:none;text-align:center;padding:8px;}
-@media(max-width:768px){.nav-links{display:none;}.nav-cta{display:none;}.nav-shop{display:none;}.nav-hamburger{display:flex;margin-left:auto;}}
+@media(max-width:1024px){.nav-links{display:none;}.nav-cta{display:none;}.nav-shop{display:none;}.nav-hamburger{display:flex;margin-left:auto;}}
 
 .hero{background:var(--mmg-grad-hero);padding:64px 22px 72px;text-align:center;position:relative;overflow:hidden;color:#fff;}
 .hero::before{content:'';position:absolute;top:-90px;right:-90px;width:360px;height:360px;background:radial-gradient(circle,rgba(38,120,192,0.14),transparent 70%);border-radius:50%;}
@@ -485,6 +485,7 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
     <span class="nav-tagline"><span data-lang="es">Medicina Regenerativa · Tampa, FL</span><span data-lang="en">Regenerative Medicine · Tampa, FL</span></span>
   </a>
   <div class="nav-links">
+    <a href="/"><span data-lang="es">Inicio</span><span data-lang="en">Home</span></a>
     <a href="/#servicios" class="active"><span data-lang="es">Servicios</span><span data-lang="en">Services</span></a>
     <a href="/team/"><span data-lang="es">Equipo</span><span data-lang="en">Our Team</span></a>
     <a href="/supplementfinder/"><span data-lang="es">Suplementos</span><span data-lang="en">Supplements</span></a>
@@ -505,6 +506,7 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
       <button class="nav-mob-close" id="mmgMobClose" aria-label="Cerrar">&times;</button>
     </div>
     <nav class="nav-mob-links">
+      <a href="/"><span data-lang="es">Inicio</span><span data-lang="en">Home</span></a>
       <a href="/#servicios" class="active"><span data-lang="es">Servicios</span><span data-lang="en">Services</span></a>
     <a href="/team/"><span data-lang="es">Equipo</span><span data-lang="en">Our Team</span></a>
     <a href="/supplementfinder/"><span data-lang="es">Suplementos</span><span data-lang="en">Supplements</span></a>
@@ -529,7 +531,7 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
     <span data-lang="es">Programa supervisado por médico con análisis de sangre, péptidos GLP-1 y plan nutricional personalizado. Sin dietas extremas. Resultados sostenibles.</span>
     <span data-lang="en">Doctor-supervised program with blood panels, GLP-1 peptides, and a personalized nutrition plan. No crash diets. Sustainable results.</span>
   </p>
-  <a href="#form" class="cta-primary"><span data-lang="es">Reserva tu evaluación gratis</span><span data-lang="en">Book a free evaluation</span></a>
+  <a href="#form" class="cta-primary"><span data-lang="es">Reserva tu consulta</span><span data-lang="en">Book a consult</span></a>
 </section>
 
 <section class="trust-strip">
@@ -623,7 +625,7 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
 <section class="section" id="form">
   <div class="section-narrow">
     <div class="eyebrow"><span data-lang="es">Empieza Hoy</span><span data-lang="en">Start Today</span></div>
-    <h2><span data-lang="es">Reserva tu <em>Evaluación Gratuita.</em></span><span data-lang="en">Book Your <em>Free Evaluation.</em></span></h2>
+    <h2><span data-lang="es">Reserva tu <em>Evaluación.</em></span><span data-lang="en">Book Your <em>Evaluation.</em></span></h2>
     <p class="lead"><span data-lang="es">30 minutos con un miembro bilingüe del equipo. Sin compromiso.</span><span data-lang="en">30 minutes with a bilingual team member. No commitment.</span></p>
     <form class="form-box" id="leadForm" novalidate>
       <div class="form-row">
@@ -794,58 +796,6 @@ document.querySelectorAll('.lang-btn').forEach((btn) => {
   ov.querySelectorAll('a').forEach(function(a){
     a.addEventListener('click',function(){if(a.getAttribute('target')!=='_blank')closeMenu();});
   });
-})();
-</script>
-<!-- Floating mobile nav — tablet & under -->
-<script>
-(function(){
-  if(document.getElementById('mmgFloatHbg'))return;
-  var css=document.createElement('style');
-  css.textContent=[
-    '.mmg-float-hbg{display:none;position:fixed;top:16px;right:16px;z-index:1000;width:52px;height:52px;border-radius:14px;background:var(--mmg-navy,#0b1e3d);border:none;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 6px 20px rgba(11,30,61,0.28);}',
-    '.mmg-float-hbg span{display:block;height:2px;width:22px;background:#fff;border-radius:2px;transition:transform .25s,opacity .25s;}',
-    '.mmg-float-hbg.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg);}',
-    '.mmg-float-hbg.is-open span:nth-child(2){opacity:0;}',
-    '.mmg-float-hbg.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}',
-    '.mmg-mob-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(11,30,61,0.5);}',
-    '.mmg-mob-overlay.is-open{display:block;}',
-    '.mmg-mob-panel{position:absolute;top:0;right:0;width:min(320px,86vw);height:100%;background:#fff;box-shadow:-6px 0 40px rgba(0,0,0,0.22);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,.84,.44,1);}',
-    '.mmg-mob-overlay.is-open .mmg-mob-panel{transform:translateX(0);}',
-    '.mmg-mob-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--mmg-border,#ddd8cc);}',
-    '.mmg-mob-head b{font-size:14px;font-weight:700;color:var(--mmg-navy,#0b1e3d);letter-spacing:.3px;}',
-    '.mmg-mob-close{background:none;border:none;width:36px;height:36px;font-size:24px;line-height:1;cursor:pointer;color:var(--mmg-navy,#0b1e3d);}',
-    '.mmg-mob-links{flex:1;overflow-y:auto;padding:8px 0;}',
-    '.mmg-mob-links a{display:block;font-size:16px;font-weight:600;color:#2d3d50;text-decoration:none;padding:15px 24px;border-bottom:1px solid #f0ede6;}',
-    '.mmg-mob-links a:hover{background:#f6f4ef;color:var(--mmg-navy,#0b1e3d);}',
-    '.mmg-mob-cta{margin:16px 22px 28px;display:block;background:var(--mmg-grad-cta,linear-gradient(135deg,#2678c0,#4a94d6));color:#fff;padding:14px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;text-align:center;box-shadow:0 6px 18px rgba(38,120,192,0.32);}',
-    '@media(max-width:1024px){.mmg-float-hbg{display:flex;}.nav-links{display:none!important;}.nav-cta{display:none!important;}}'
-  ].join('');
-  document.head.appendChild(css);
-  var srcLinks=document.querySelector('.nav-links');
-  var srcCta=document.querySelector('.nav-cta');
-  var btn=document.createElement('button');
-  btn.id='mmgFloatHbg';btn.className='mmg-float-hbg';btn.setAttribute('aria-label','Menú');btn.setAttribute('aria-expanded','false');
-  btn.innerHTML='<span></span><span></span><span></span>';
-  var ov=document.createElement('div');
-  ov.className='mmg-mob-overlay';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');
-  var panel=document.createElement('div');panel.className='mmg-mob-panel';
-  var head=document.createElement('div');head.className='mmg-mob-head';
-  head.innerHTML='<b>Mattos Medical Group</b>';
-  var closeBtn=document.createElement('button');closeBtn.className='mmg-mob-close';closeBtn.setAttribute('aria-label','Cerrar');closeBtn.innerHTML='&times;';
-  head.appendChild(closeBtn);
-  var linksWrap=document.createElement('nav');linksWrap.className='mmg-mob-links';
-  if(srcLinks)linksWrap.innerHTML=srcLinks.innerHTML;
-  panel.appendChild(head);panel.appendChild(linksWrap);
-  if(srcCta){var cta=srcCta.cloneNode(true);cta.className='mmg-mob-cta';cta.style.marginLeft='';panel.appendChild(cta);}
-  ov.appendChild(panel);
-  document.body.appendChild(btn);document.body.appendChild(ov);
-  function open(){ov.classList.add('is-open');btn.classList.add('is-open');btn.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}
-  function close(){ov.classList.remove('is-open');btn.classList.remove('is-open');btn.setAttribute('aria-expanded','false');document.body.style.overflow='';}
-  btn.addEventListener('click',function(){ov.classList.contains('is-open')?close():open();});
-  closeBtn.addEventListener('click',close);
-  ov.addEventListener('click',function(e){if(e.target===ov)close();});
-  linksWrap.addEventListener('click',function(e){if(e.target.closest('a'))close();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
 })();
 </script>
 </body>
