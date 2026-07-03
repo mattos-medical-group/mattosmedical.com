@@ -501,8 +501,8 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
     <a href="#servicios"><span data-lang="es">Servicios</span><span data-lang="en">Services</span></a>
     <a href="#nosotros"><span data-lang="es">Nosotros</span><span data-lang="en">About</span></a>
     <a href="https://mattosmedical.com/team/index.html"><span data-lang="es">Equipo</span><span data-lang="en">Team</span></a>
-    <a href="https://mattos-medical-group.github.io/mmg-supplementservice-finder/" target="_blank" rel="noopener"><span data-lang="es">Suplementos</span><span data-lang="en">Supplements</span></a>
-    <a href="https://mattos-medical-group.github.io/mattos-blog/">Blog</a>
+    <a href="https://mattosmedical.com/supplementfinder/" target="_blank" rel="noopener"><span data-lang="es">Suplementos</span><span data-lang="en">Supplements</span></a>
+    <a href="https://mattosmedical.com/blog/">Blog</a>
     <a href="#faq">FAQ</a>
     <a href="#contacto"><span data-lang="es">Contacto</span><span data-lang="en">Contact</span></a>
   </div>
@@ -596,7 +596,7 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
         <p><span data-lang="es">Programa supervisado con análisis de sangre, péptidos GLP-1, y plan de nutrición personalizado. Resultados sostenibles.</span><span data-lang="en">Supervised program with blood panels, GLP-1 peptides, and personalized nutrition plan. Sustainable results.</span></p>
         <div class="meta"><span data-lang="es">Aprenda más</span><span data-lang="en">Learn more</span> →</div>
       </a>
-      <a class="svc-card" href="https://mattos-medical-group.github.io/mmg-supplementservice-finder/" target="_blank" rel="noopener">
+      <a class="svc-card" href="https://mattosmedical.com/supplementfinder/" target="_blank" rel="noopener">
         <h3><span data-lang="es">Buscador de Suplementos</span><span data-lang="en">Supplement Finder</span></h3>
         <p><span data-lang="es">Encuentra el suplemento correcto para tu meta de salud — línea Mattos y medicina china tradicional.</span><span data-lang="en">Find the right supplement for your health goal — Mattos line and traditional Chinese medicine.</span></p>
         <div class="meta"><span data-lang="es">Abrir buscador</span><span data-lang="en">Open finder</span> ↗</div>
@@ -708,7 +708,7 @@ footer{background:var(--mmg-navy);color:rgba(255,255,255,0.55);padding:48px 22px
       <h4><span data-lang="es">Recursos</span><span data-lang="en">Resources</span></h4>
       <a href="https://mattosmedical.com/cognitive/index.html"><span data-lang="es">Salud Cognitiva</span><span data-lang="en">Cognitive Health</span></a>
       <a href="https://mattosmedical.com/weightloss/index.html"><span data-lang="es">Pérdida de Peso</span><span data-lang="en">Weight Loss</span></a>
-      <a href="https://mattos-medical-group.github.io/mmg-supplementservice-finder/" target="_blank" rel="noopener"><span data-lang="es">Buscador de Suplementos</span><span data-lang="en">Supplement Finder</span></a>
+      <a href="https://mattosmedical.com/supplementfinder/" target="_blank" rel="noopener"><span data-lang="es">Buscador de Suplementos</span><span data-lang="en">Supplement Finder</span></a>
       <a href="#faq">FAQ</a>
     </div>
     <div class="foot">
@@ -814,7 +814,7 @@ if ('IntersectionObserver' in window) {
     '.mmg-mob-links a{display:block;font-size:16px;font-weight:600;color:#2d3d50;text-decoration:none;padding:15px 24px;border-bottom:1px solid #f0ede6;}',
     '.mmg-mob-links a:hover{background:#f6f4ef;color:var(--mmg-navy,#0b1e3d);}',
     '.mmg-mob-cta{margin:16px 22px 28px;display:block;background:var(--mmg-grad-cta,linear-gradient(135deg,#2678c0,#4a94d6));color:#fff;padding:14px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;text-align:center;box-shadow:0 6px 18px rgba(38,120,192,0.32);}',
-    '@media(max-width:1024px){.mmg-float-hbg{display:flex;}}'
+    '@media(max-width:1024px){.mmg-float-hbg{display:flex;}.nav-links{display:none!important;}.nav-cta{display:none!important;}}'
   ].join('');
   document.head.appendChild(css);
   var srcLinks=document.querySelector('.nav-links');
